@@ -3,6 +3,13 @@ SystemVerilog Fundamentals
 
 ## Basics
 ----
+### Event Control
+An event controls the execution of a statement or a block of a statement. Value changes on variables and nets can be used as a synchronization event to trigger the execution of other procedural statements and is an implicit event.
+* A negedge is a transition from 1 to X, Z or 0 and from X or Z to 0
+* A posedge is a transition from 0 to X, Z or 1 and from X or Z to 1
+
+
+The event is based on the direction of change like towards 0, which makes it a negedge and change towards 1 make it a posedge.
 ### Data Types and Literals
 
 The Verilog datatypes have 4-state values: 0, 1, X, Z. SystemVerilog adds 2-state value types: 
@@ -163,9 +170,9 @@ foreach (mat[k,l])
 
 <ins>**While and Do...While Loops Statements**</ins>
 The **while** loop excutes a group of statements untill **expression** become false.
-* In while loops, the expression is checked at the beginning.
-* In Do...While loops the expression is checked after statements execute.
-In Do...While loops the statement block executes at least once.
+* In **while** loops, the expression is checked at the beginning.
+* In **Do...While** loops the expression is checked after statements execute.
+In **Do...While** loops the statement block executes at least once.
 ```sv
 while (condition) begin
   •••
@@ -264,7 +271,7 @@ end
 end
 ```
 
-<ins>**If-Else if Statements**</ins>
+<ins>**If-Else if-Else Statements**</ins>
 
 * **priority if**
   * Implies full logic
@@ -275,13 +282,13 @@ end
 
 ```sv
 priority if (contition1) // First match is excuted
-  // statements
+  •••
 else if (condition2)
-  // statements
+  •••
 else if (condition3)
-  // statements
+  •••
 else
-  // statements
+  •••
 end
 ```
 
@@ -293,13 +300,22 @@ end
 
 ```sv
 unique if (contition1) // Exactly one match must match
-  // statements
+  •••
 else if (condition2)
-  // statements
+  •••
 else
-  // statements
+  •••
 end
 ```
 
+<ins>**Iff Qualifier**</ins>
+The **iff** keyword qualifies a procedural event control. The event expression triggers only if the **iff** condition is true.
+* **iff** has precedence over **or** - can add parenthesis for clarity
+* Limited use in RTL code - latches and gated clocks.
+* More useful for embbedded events in verification stimulus code
 
-
+```sv
+always @(trigger iff enable == 1) 
+  y <= trigger // creates latch in synthesis
+  •••
+```
