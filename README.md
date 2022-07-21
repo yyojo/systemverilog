@@ -51,8 +51,8 @@ logic and_out, or_out; // and_out and or_out are logic - single instance outputs
 one m1 (and_out, a, b);
 two m2 (or_out, a, b);
 initial begin
- a = 0; // a is logic - assigned in an initial block.
- b = 0; // b is logic - assigned in an initial block.
+  a = 0; // a is logic - assigned in an initial block.
+  b = 0; // b is logic - assigned in an initial block.
  end
  endmodule
  
