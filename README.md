@@ -74,6 +74,7 @@ initial begin
 ```
 
 <ins>**Unsized Literals**</ins>
+
 An unsized literal is a number with a base specifier but no size specification. 
 
 ```sv
@@ -142,6 +143,7 @@ end
 ```
 
 <ins>**For Loop Statements**</ins>
+
 SystemVerilog allows to declare a for loop variable within for statement.
 * Variables are visible only in the loop
 * The same identifier name cen safely used in multiple loops.
@@ -153,6 +155,7 @@ initial begin
 ```
 
 <ins>**Foreach Loop Statements**</ins>
+
 This loop iterated over all the elements of an array. 
 * Loop variable does not have to be declared
 * Only visible inside the loop
@@ -169,6 +172,7 @@ foreach (mat[k,l])
 ```
 
 <ins>**While and Do...While Loops Statements**</ins>
+
 The **while** loop excutes a group of statements untill **expression** become false.
 * In **while** loops, the expression is checked at the beginning.
 * In **Do...While** loops the expression is checked after statements execute.
@@ -192,6 +196,7 @@ end
 ```
 
 <ins>**Forver Loop Statements**</ins>
+
 A given set of statement can be executed N number of times with a **repeat** consruct.
 
 ```sv
@@ -201,6 +206,7 @@ end
 ```
 
 <ins>**Jump Statements**</ins>
+
 SystemVerilog adds the break and continue keyword to control execution of any kind of loop statement.
 * **break**
   * Terminates the execution of loop immmediately
