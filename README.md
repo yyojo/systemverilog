@@ -3,13 +3,35 @@ SystemVerilog Fundamentals
 
 ## Basics
 ----
-### Event Control
+### Timing Control
+<ins>**Delay Control**</ins>
+
+The delay control is a way of adding a delay between when the simulator encounters the statement and when it executes.
+Delay control is achieved by specifying the waiting time to execution when the statement is encountered. The symbol **#** is used to specify the delay.
+
+We can specify the delay based timing control in three ways:
+
+* Regular delay control - It will be specified on the procedural assignment left as a non-zero number.
+* Intra - assignment delay control -  In this case, delays will be specified on the assignment operator's right-hand side. The right-hand side expression will be evaluated at the current time, and the assignment will occur only after the delay.
+* Zero delay control -  Zero delay control statement specifies zero delay value to the left-hand side of a procedural assignment. This method is used to ensure the statement is executed at the end of the simulation time. It means, zero delay control statement is executed after all other statements in that simulation time are executed.
+
+<ins>**Event Control**</ins>
+
+The event expression allows the statement to be delayed until the occurrence of some simulation event, which can change of value on a net or variable or an explicitly named event triggered in another procedure. Any change in a variable or net can be detected using the **@** event control.
+
+
 An event controls the execution of a statement or a block of a statement. Value changes on variables and nets can be used as a synchronization event to trigger the execution of other procedural statements and is an implicit event.
+The event is based on the direction of change like towards 0, which makes it a negedge and change towards 1 make it a posedge.
 * A negedge is a transition from 1 to X, Z or 0 and from X or Z to 0
 * A posedge is a transition from 0 to X, Z or 1 and from X or Z to 1
+A transition from the same state to the same state does not suppose to be an edge. The edge event can be detected only on the LSB of a vector signal or variable.
+If an expression evaluates to the same result, then it cannot be considered as an event. There are different types of event-based controls.
+
+* Regular event control -  Execution of statement will happen on signal changes or at positive or negative transitions of signals. For example, posedge of a clock, and the negedge of reset, etc.
+* Named Event Control - The event keyword can be used to declare a named event that can be triggered explicitly. An event cannot hold any data, no time duration, and can be made to occur at any particular time. A named event is triggered by the -> operator by prefixing it before the named event handle. A named event can be waited upon through the @ operator.
+* 3. Event OR control -  The transitions of signal or event can trigger statements' execution. The or operator can wait until any one of the listed events is triggered in an expression. The comma (,) can be used instead of the or operator.
 
 
-The event is based on the direction of change like towards 0, which makes it a negedge and change towards 1 make it a posedge.
 ### Data Types and Literals
 
 The Verilog datatypes have 4-state values: 0, 1, X, Z. SystemVerilog adds 2-state value types: 
@@ -315,6 +337,7 @@ end
 ```
 
 <ins>**Iff Qualifier**</ins>
+
 The **iff** keyword qualifies a procedural event control. The event expression triggers only if the **iff** condition is true.
 * **iff** has precedence over **or** - can add parenthesis for clarity
 * Limited use in RTL code - latches and gated clocks.
