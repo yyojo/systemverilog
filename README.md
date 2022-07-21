@@ -25,7 +25,7 @@ Assigning a SystemVerilog variable:
 * From a single module out port
 * From a single primitive output
 
-
+SystemVerilog has restrictions on assignments to variables. These restrictions aim to prevent multiple drivers on a signle variable.
 * You cannot combine procedural assignments with continuous assignments or module output drivers on the same variable.
 * You cannot have multiple continuous assignments or multiple outpout ports drive the same variable.
 * Only net types can have multiple drivers.
