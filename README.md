@@ -51,8 +51,8 @@ logic and_out, or_out; // and_out and or_out are logic - single instance outputs
 one m1 (and_out, a, b);
 two m2 (or_out, a, b);
 initial begin
-  a = 0; // a is logic - assigned in an initial block.
-  b = 0; // b is logic - assigned in an initial block.
+ a = 0; // a is logic - assigned in an initial block.
+ b = 0; // b is logic - assigned in an initial block.
  end
  endmodule
  
@@ -77,4 +77,24 @@ bus = 'x; // xxxxxx
 ```
 
 <ins>**Time Literals**</ins>
-An unsized literal is a number with a base specifier but no size specification. 
+Time literals aren nu mbers wrriten in integer or fixed-point format, followed without a space by a time unit (fs, ps, ns, us, ms, s). It scaled to the current time unit and rounded to the currenct time precision. SystemVerilog also have a 1step delay value (equals to one simulation precision unit , the smallest resolution of all the timescale/ timeprecision declarations in the code).
+
+SystemVerilog introduces the **timeunit** and the **timeprecision** declarations, which are belong to the scope of the module and overwrite the timescale compiler directive for that specific module.
+
+
+```sv
+'timescale 1ns / 100ps // time unit 1ns , precision 100ps
+
+module test;
+logic a, b, c, sel , clk;
+initial begin 
+  #20ns sel = 0; // blocking assign.
+  #5.18 sel = 1; // rounded to 5.2ns.
+  b = #1step c; // blocking assign using 1step (eqauls here to 100ps) , after evaluating the right operand, the simulator.
+                // will block the statement until one simulation time precision elapses, then it will make the assignent into b.
+end
+
+always @(posedge clk)
+  #5.1ns a <= a + 1; // nonblocking assign
+endmodule
+```
