@@ -4,6 +4,7 @@ SystemVerilog Fundamentals
 ## Basics
 ----
 ### Data Types and Literals
+
 The Verilog datatypes have 4-state values: 0, 1, X, Z. SystemVerilog adds 2-state value types: 
 <img width="988" alt="Screen Shot 2022-07-21 at 09 26 57" src="https://user-images.githubusercontent.com/109002901/180144279-e933bcee-43e1-4ffd-8233-64a8f0651a67.png">
 
@@ -17,7 +18,7 @@ logic [7:0] mem8x32 [0:31]
 
 Notice that 4-state variables initializes to X and 2-state variables are initialized to 0. So assigning a 4-state value to a 2-state type turns hign impedance and unknown into zero, and it can't be recovered. In addition, if there is a failure when initialzing design and 4-state variable represent the design state, it shows the design state as X - showing that the design could not be initialize. However in 4-state value it shows the design state as 0 - hides failure to initialize design.
 
-<ins>Connectivity characteristics</ins>
+<ins>**Connectivity Characteristics**</ins>
 
 Assigning a SystemVerilog variable:
 * In any number of **initial** or **always** blocks
@@ -29,6 +30,7 @@ SystemVerilog has restrictions on assignments to variables. These restrictions a
 * You cannot combine procedural assignments with continuous assignments or module output drivers on the same variable.
 * You cannot have multiple continuous assignments or multiple outpout ports drive the same variable.
 * Only net types can have multiple drivers.
+* Special procedural blocks (always_ff , always_comb. always_latch) don't allow more than a single driver to variables (in regular always block it's allowed).
 
 Thus you can declare most signals to be variable. As the var keyboard is optional, you can declare most signals as **logic**.
 ```sv
@@ -61,3 +63,18 @@ initial begin
  two m2 (y, a, b);
  endmodule
 ```
+
+<ins>**Unsized Literals**</ins>
+An unsized literal is a number with a base specifier but no size specification. 
+
+```sv
+logic [5:0] bus; // Unsized literals are also un-based.
+
+bus = '0; // 000000
+bus = '1; // 111111
+bus = 'z; // zzzzzz
+bus = 'x; // xxxxxx
+```
+
+<ins>**Time Literals**</ins>
+An unsized literal is a number with a base specifier but no size specification. 
