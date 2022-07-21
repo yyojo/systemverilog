@@ -94,7 +94,8 @@ begin
   #20ns sel = 0; // blocking assign.
   #5.18 sel = 1; // rounded to 5.2ns.
   b = #1step c; // blocking assign using 1step (eqauls here to 100ps) , after evaluating the right operand, the simulator.
-                // will block the statement until one simulation time precision elapses, then it will make the assignent into b.
+                // will block the statement until one simulation time precision elapses, 
+                // then it will make the assignent into b.
 end
 
 always @(posedge clk)
@@ -175,20 +176,56 @@ do begin
 end while(condition)
 ```
 
-<ins>**While and Do...While Loops Statements**</ins>
-The **while** loop excutes a group of statements untill **expression** become false.
-* In while loops, the expression is checked at the beginning.
-* In Do...While loops the expression is checked after statements execute.
-In Do...While loops the statement block executes at least once.
+<ins>**Jump Statements**</ins>
+SystemVerilog adds the break and continue keyword to control execution of any kind of loop statement.
+* **break**
+  * Terminates the execution of loop immmediately
+  * Usually under conditional control
+
+* **continue**
+  * Jumps to the next iteration of a loop
+  * Usually under conditional control
 ```sv
-while (condition) begin
+repeat (N) begin
+  •••
+  if (condition)
+    break;
+  end
+  
+foreach (arr[i]) begin
+  if (condition)
+    continue;
   •••
 end
-  
-do begin 
-  •••
-end while(condition)
 ```
 
+<ins>**Case Statements**</ins>
 
+* **priority case**
+  * Modifier to the case statement
+  * Synthesis: Equivalent to the **full_case** attribute in Verilog
+  * Simulation Compile-time / Run-time violation report (probably warning) if no case item expressiong match the case expression
+  * Overlapping branches are permitted
+
+
+
+* **unique case**
+  * Modifier to the case statement
+  * Synthesis: Equivalent to the **full_case** and **parallel_case** attribute in Verilog
+  * Simulation Compile-time / Run-time violation report (probably warning) if no case item expressiong match the case expression
+  * No overlapping allowed - Runtime warning if multiple breanches found for a case value
+  * One branch must be executed - Runtime warning if no branch found for a case value
+```sv
+repeat (N) begin
+  •••
+  if (condition)
+    break;
+  end
+  
+foreach (arr[i]) begin
+  if (condition)
+    continue;
+  •••
+end
+```
 
