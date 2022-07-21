@@ -19,17 +19,17 @@ We can specify the delay based timing control in three ways:
 
 The event expression allows the statement to be delayed until the occurrence of some simulation event, which can change of value on a net or variable or an explicitly named event triggered in another procedure. Any change in a variable or net can be detected using the **@** event control.
 
-
 An event controls the execution of a statement or a block of a statement. Value changes on variables and nets can be used as a synchronization event to trigger the execution of other procedural statements and is an implicit event.
 The event is based on the direction of change like towards 0, which makes it a negedge and change towards 1 make it a posedge.
 * A negedge is a transition from 1 to X, Z or 0 and from X or Z to 0
 * A posedge is a transition from 0 to X, Z or 1 and from X or Z to 1
+
 A transition from the same state to the same state does not suppose to be an edge. The edge event can be detected only on the LSB of a vector signal or variable.
 If an expression evaluates to the same result, then it cannot be considered as an event. There are different types of event-based controls.
 
 * Regular event control -  Execution of statement will happen on signal changes or at positive or negative transitions of signals. For example, posedge of a clock, and the negedge of reset, etc.
 * Named Event Control - The event keyword can be used to declare a named event that can be triggered explicitly. An event cannot hold any data, no time duration, and can be made to occur at any particular time. A named event is triggered by the -> operator by prefixing it before the named event handle. A named event can be waited upon through the @ operator.
-* 3. Event OR control -  The transitions of signal or event can trigger statements' execution. The or operator can wait until any one of the listed events is triggered in an expression. The comma (,) can be used instead of the or operator.
+* Event OR control -  The transitions of signal or event can trigger statements' execution. The or operator can wait until any one of the listed events is triggered in an expression. The comma (,) can be used instead of the or operator.
 
 
 ### Data Types and Literals
