@@ -123,8 +123,8 @@ initial
 begin 
   #20ns sel = 0; // blocking assign.
   #5.18 sel = 1; // rounded to 5.2ns.
-  b = #1step c; // blocking assign using 1step (eqauls here to 100ps) , after evaluating the right operand, the simulator.
-                // will block the statement until one simulation time precision elapses, 
+  b = #1step c; // blocking assign using 1step (eqauls here to 100ps) , after evaluating the right operand,
+                //  the simulator. will block the statement until one simulation time precision elapses, 
                 // then it will make the assignent into b.
 end
 
