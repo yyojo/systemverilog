@@ -257,9 +257,49 @@ end
   initial begin 
   op = 0;
   
-  unique case (op) // Runtime warning -One branch must be executed
+  unique case (op) // Runtime warning - One branch must be executed
   1 : $display ("Found to be 1");
   2 : $display ("Found to be 2);
   endcase
 end
 ```
+
+<ins>**If-Else if Statements**</ins>
+
+* **priority if**
+  * Implies full logic
+  * Modifier can be applied to if statements with the same effects
+  * Branch conditions are checked sequentially. First match executes
+  * Compile-time / Run-time violation report (probably warning) if no branch taken (use unconditional else) 
+  * Overlapping branches are permitted
+
+```sv
+priority if (contition1) // First match is excuted
+  // statements
+else if (condition2)
+  // statements
+else if (condition3)
+  // statements
+else
+  // statements
+end
+```
+
+* **unique if**
+  * Implies parallel logic
+  * Branch conditions are checked simultaneously. Exactly one branch must match
+  * Compile-time / Run-time violation report (probably warning) if no branch taken (use unconditional else)
+  * Compile-time / Run-time violation report (probably warning) if multiple branches can be taken
+
+```sv
+unique if (contition1) // Exactly one match must match
+  // statements
+else if (condition2)
+  // statements
+else
+  // statements
+end
+```
+
+
+
