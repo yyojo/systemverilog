@@ -145,18 +145,50 @@ initial begin
 ```
 
 <ins>**Foreach Loop Statements**</ins>
-This loop iterated over all the elements of an array. Loop variable characteristics
+This loop iterated over all the elements of an array. 
 * Loop variable does not have to be declared
 * Only visible inside the loop
 * Are read only
 
 ```sv
-initial begin
-  for (int i = 0 ; i < 10 i = i+1)
-    •••
+int arr [7:0];
+foreach (arr[i]) // i is the loop variable
+  arr[i] = i*2;
+  
+int mat [7:0] [2:0];
+foreach (mat[k,l])
+  mat[k][l] = k*l;
 ```
 
+<ins>**While and Do...While Loops Statements**</ins>
+The **while** loop excutes a group of statements untill **expression** become false.
+* In while loops, the expression is checked at the beginning.
+* In Do...While loops the expression is checked after statements execute.
+In Do...While loops the statement block executes at least once.
+```sv
+while (condition) begin
+  •••
+end
+  
+do begin 
+  •••
+end while(condition)
+```
 
+<ins>**While and Do...While Loops Statements**</ins>
+The **while** loop excutes a group of statements untill **expression** become false.
+* In while loops, the expression is checked at the beginning.
+* In Do...While loops the expression is checked after statements execute.
+In Do...While loops the statement block executes at least once.
+```sv
+while (condition) begin
+  •••
+end
+  
+do begin 
+  •••
+end while(condition)
+```
 
 
 
