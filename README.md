@@ -26,12 +26,14 @@ Assigning a SystemVerilog variable:
 
 Thus you can declare most signals to be variable. As the var keyboard is optional, you can declare most signals as **logic**.
 ```sv
-module one (output logic y, input logic a, b); // y is logic - assigned in procedural block. a, b connected to single module inputs.
+module two (output logic y, // y is logic - assigned in a procedural block.
+            input logic a, b); // a, b connected to single module inputs.
   always @ ( a or b )
     y = a && b;
 endmodule
 
-module two (output logic y, input logic a, b); // y is logic - assigned by a single continuous assignment. a, b connected to single module inputs.
+module two (output logic y, // y is logic - assigned by a single continuous assignment.
+            input logic a, b); // a, b connected to single module inputs.
   assign y = a || b;
 endmodule
 
