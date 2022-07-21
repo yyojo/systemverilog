@@ -6,6 +6,8 @@ SystemVerilog Fundamentals
 ### Data Types and Literals
 
 The Verilog datatypes have 4-state values: 0, 1, X, Z. SystemVerilog adds 2-state value types: 
+
+
 <img width="988" alt="Screen Shot 2022-07-21 at 09 26 57" src="https://user-images.githubusercontent.com/109002901/180144279-e933bcee-43e1-4ffd-8233-64a8f0651a67.png">
 
 In Verilog reg data type is confusing - It can synthesize to a register or net depending on the usage. SystemvVerilog defines register data types as variable, so **var logic** replaces Verilog's **reg**.The keyword **logic** defines that the variable or net (wire) is 4-state data type.
@@ -87,7 +89,8 @@ SystemVerilog introduces the **timeunit** and the **timeprecision** declarations
 
 module test;
 logic a, b, c, sel , clk;
-initial begin 
+initial 
+begin 
   #20ns sel = 0; // blocking assign.
   #5.18 sel = 1; // rounded to 5.2ns.
   b = #1step c; // blocking assign using 1step (eqauls here to 100ps) , after evaluating the right operand, the simulator.
@@ -98,3 +101,62 @@ always @(posedge clk)
   #5.1ns a <= a + 1; // nonblocking assign
 endmodule
 ```
+### Procedural Statements and Procedural Blocks
+For any named block, SystemVerilog allows to repeat the name after the block **end , join or join variant keyword**. SystemVerilog allows a matching name to be specified with the block **end**.
+
+```sv
+module test;
+initial
+  begin : block_A
+    •••
+    begin : block_B
+      •••
+    end: block_b
+  end : block_A
+endmodule : test
+```
+
+ In SystemVerilog unnamed block can declare local variables.
+ * The variable is visible in the block where it is declared and in any nested blocks.
+ * Hierarchical references to the variable cannot be used.
+
+```sv
+initial begin // unnamed block
+  integer i; // local declaration in unnamed block
+  while (i <=10) begin // unnamed block
+    $display("i : %d", i);
+    if (i < 5) begin // unnamed block
+      $display("Number is: %d", i)
+    end
+    i = i + 1;
+  end
+end
+```
+
+<ins>**For Loop Statements**</ins>
+SystemVerilog allows to declare a for loop variable within for statement.
+* Variables are visible only in the loop
+* The same identifier name cen safely used in multiple loops.
+
+```sv
+initial begin
+  for (int i = 0 ; i < 10 i = i+1)
+    •••
+```
+
+<ins>**Foreach Loop Statements**</ins>
+This loop iterated over all the elements of an array. Loop variable characteristics
+* Loop variable does not have to be declared
+* Only visible inside the loop
+* Are read only
+
+```sv
+initial begin
+  for (int i = 0 ; i < 10 i = i+1)
+    •••
+```
+
+
+
+
+
