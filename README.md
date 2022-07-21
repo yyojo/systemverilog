@@ -175,6 +175,23 @@ do begin
   •••
 end while(condition)
 ```
+<ins>**Repeat Loop Statements**</ins>
+A forever loop runs forever
+
+```sv
+foever begin
+  •••
+end
+```
+
+<ins>**Forver Loop Statements**</ins>
+A given set of statement can be executed N number of times with a **repeat** consruct.
+
+```sv
+repeat (N) begin
+  •••
+end
+```
 
 <ins>**Jump Statements**</ins>
 SystemVerilog adds the break and continue keyword to control execution of any kind of loop statement.
@@ -207,25 +224,42 @@ end
   * Simulation Compile-time / Run-time violation report (probably warning) if no case item expressiong match the case expression
   * Overlapping branches are permitted
 
-
+```sv
+initial begin 
+  op = 0;
+  
+  priority case (op) // First match is excuted
+  0 : $display ("Found to be 0");
+  0 : $display ("Again found to be 0);
+  1 : $display ("Found to be 1);
+  endcase
+end
+```
 
 * **unique case**
   * Modifier to the case statement
   * Synthesis: Equivalent to the **full_case** and **parallel_case** attribute in Verilog
   * Simulation Compile-time / Run-time violation report (probably warning) if no case item expressiong match the case expression
   * No overlapping allowed - Runtime warning if multiple breanches found for a case value
-  * One branch must be executed - Runtime warning if no branch found for a case value
+  * One branch must be executed - Runtime warning if no branch found for a case value. Use 
+
 ```sv
-repeat (N) begin
-  •••
-  if (condition)
-    break;
-  end
+initial begin 
+  op = 0;
   
-foreach (arr[i]) begin
-  if (condition)
-    continue;
-  •••
+  unique case (op) // Runtime warning - No overlapping allowed
+  0 : $display ("Found to be 0");
+  0 : $display ("Again found to be 0);
+  1 : $display ("Found to be 1);
+  endcase
+end
+
+  initial begin 
+  op = 0;
+  
+  unique case (op) // Runtime warning -One branch must be executed
+  1 : $display ("Found to be 1");
+  2 : $display ("Found to be 2);
+  endcase
 end
 ```
-
