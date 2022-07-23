@@ -1,7 +1,7 @@
 SystemVerilog Fundamentals
 =================
 
-## Timimng Control
+## Timing Control
 ----
 ### Delay Control
 The delay control is a way of adding a delay between when the simulator encounters the statement and when it executes.
