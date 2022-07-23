@@ -468,4 +468,5 @@ if (a ==? 4'b?1?1) // true
 Remember that Verilog has two (in)equality operators:
 * Logical (in)equality **==** 
 * Identity (in)equLITY **===**
+
 The difference is that equivalence sign can have an unknown value. (if a == b and b has some unknowns -> unknown, but if  a === b and b has some unknowns in it , the result will be true if a also has unknowns in that particular bit positions, else result is false)
