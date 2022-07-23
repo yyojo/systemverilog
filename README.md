@@ -357,7 +357,7 @@ The Verilog **always** block can synthesize to combinational, latched or sequent
   * Automatically executed once at time 0 without waiting for an event - after all **initial** and **always** blocks have executed
   
 ```sv
-always_l // no warnings or errors
+always_comb // no warnings or errors
   if (sel == 1) 
     op = a;
   else
