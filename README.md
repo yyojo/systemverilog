@@ -420,6 +420,14 @@ The Verilog **always** block can synthesize to combinational, latched or sequent
 
 ## Operators
 ----
+### Assignments Types
+* Blocking Assignments -  Blocking assignments statements are assigned using **=** and are excuted one after the other in a procedural block. However, this will not prevent exexution of statements that run in parallel block.
+* Non-blocking Assignments - Non-blocking assignments allows assignments to be scheduled without blocking the execution of the following statements and is specified by a **<=** symbol. It's important to note that the same symbool is used as a relational operator expressions and as an assignment operator in the context of a non-blocking assignment.
+
+### Assignment Operators
 Operators that join an operation along with a blocking assignment to the first operand of the operator.
 
 ![Screen Shot 2022-07-23 at 20 32 39](https://user-images.githubusercontent.com/109002901/180616360-c9eceb33-75af-4fb0-a83c-2a8d52b3d3f2.png)
+
+You can't use them in any block where you are making an assignment to  storage device, and there is any chance that there may be a race between this block make the assignment and some other block reading the value. You should always use a non-blocking assignment. 
+Assignment operators are **blocking assignments** , therefore they are suitable for RTL combinational logic, temporary variables in RTL sequential code or testbench.
