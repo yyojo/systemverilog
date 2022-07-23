@@ -408,7 +408,7 @@ The Verilog **always** block can synthesize to combinational, latched or sequent
   * SystemVerilog adds a specialized procedutal block for modeling reagistered logic
   * Any variable assigned in an **always_ff** cannot be assigned by another procedure
   * Contains one and only one event control
-  * Cannot conation any block timing
+  * Cannot conation any block timing - for example can't have #delay inside the block
   
   ```sv
   always_ff @ (posedge clk or posedge rst)
