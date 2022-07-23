@@ -348,3 +348,58 @@ always @(trigger iff enable == 1)
   y <= trigger // creates latch in synthesis
   •••
 ```
+
+<ins>**Blocks**</ins>
+The Verilog **always** block can synthesize to combinational, latched or sequential logic, depending upon you coding style's sensitivity list. SystemVerilog adds implementation specific procedural blocks - **always_comb, always_latch, always_ff**, these block reduce design ambiguty by clearly indicating the hardware intent for a prodecural block.
+
+* **always_comb**
+  * SystemVerilog procedural block 
+  * Any variable assigned in an **always_comb** cannot be assigned by another procedure
+  * Cannot contain further blocking timing or event control 
+  * Sensitive to changes in any input to a called function
+  * Automatically executed once at time 0 without waiting for an event - after all **initial** and **always** blocks have executed
+  
+  ```sv
+  always_l // no warnings or errors
+    if (sel == 1) 
+      op = a;
+    else
+      op = b;
+
+  ---------------
+  
+  logic op;
+  always_comb 
+     if (sel1) 
+       op = a;
+     else
+       op = b;
+  always_comb // error - op variable assigned by another procedure
+     if (sel2) 
+       op = a;
+     else
+       op = b;    
+  ```
+  * **always_latch**
+  * SystemVerilog adds a specialized procedutal block for modeling latched logic
+  * Any variable assigned in an **always_lathc** cannot be assigned by another procedure
+  * Cannot contain further blocking timing or event control 
+  * Sensitivw to changes in any input to a called function
+  * Automatically executed once at time 0 without waiting for an event - after all **initials** and **always** have executed
+  
+  ```sv
+  always_latch // no warnings or errors
+    if (gate == 1)
+      op <= a;
+  
+  ---------------
+  
+  always_latch
+     if (en1) 
+       op <= a;
+
+  always_comb // error - op variable assigned by another procedure
+     if (en2) 
+       op <= b;  
+  ```
+  
