@@ -431,3 +431,43 @@ Operators that join an operation along with a blocking assignment to the first o
 
 You can't use them in any block where you are making an assignment to  storage device, and there is any chance that there may be a race between this block make the assignment and some other block reading the value. You should always use a non-blocking assignment. 
 Assignment operators are **blocking assignments** , therefore they are suitable for RTL combinational logic, temporary variables in RTL sequential code or testbench.
+
+### Pre- and Post- Increment/Decrement Operators
+These combine a blocking assignment and an increment or decremnet operator.
+* Pre-form **++variable , --variable** adds or subtracts and then uses the new value.
+* Post-form **variable++ , variable--**  uses the new value and then adds or subtracts.
+
+  ```sv
+  initial begin
+    b = 1;
+    a = b++; // post a = 1, b = 2
+    a = ++b; // pre a = 3 , b = 3
+    a = b--; // post a = 3, b = 2
+    a = --b; // pre a = 1 , b = 1
+  end
+  ```
+  
+### Wildcard Equivalence Operator
+The wild equality operator **==?** and inequality operator **!=?** treat X and Z values in a given bit position as a wildcard. A wildcard bit matches any bit value (0, 1,Z, or X) in the value of the expression being compared against it.
+* An X, Z, or ? in the right operand matches any value in the left
+* Asymmetric - only right side can have wildcatd bits
+
+  ```sv
+  a = 4'b0101;
+  b = 4'b01XZ;
+  
+  if (a == b) // unknown
+    •••
+  if (a === b) // false
+    •••
+  if (a ==? b) // true
+    •••
+  if (a !=? b) // flase
+    •••
+  if (a ==? 4'b?1?1) // true
+    •••
+  ```
+Remember that Verilog has two (in)equality operators:
+* Logical (in)equality **==** 
+* Identity (in)equLITY **===**
+The difference is that equivalence sign can have an unknown value. (if a == b and b has some unknowns -> unknown, but if  a === b and b has some unknowns in it , the result will be true if a also has unknowns in that particular bit positions, else result is false)
