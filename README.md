@@ -380,9 +380,9 @@ The Verilog **always** block can synthesize to combinational, latched or sequent
      else
        op = b;    
   ```
-  * **always_latch**
+* **always_latch**
   * SystemVerilog adds a specialized procedutal block for modeling latched logic
-  * Any variable assigned in an **always_lathc** cannot be assigned by another procedure
+  * Any variable assigned in an **always_latch** cannot be assigned by another procedure
   * Cannot contain further blocking timing or event control 
   * Sensitivw to changes in any input to a called function
   * Automatically executed once at time 0 without waiting for an event - after all **initials** and **always** have executed
@@ -403,3 +403,16 @@ The Verilog **always** block can synthesize to combinational, latched or sequent
        op <= b;  
   ```
   
+* **always_ff**
+  * SystemVerilog adds a specialized procedutal block for modeling reagistered logic
+  * Any variable assigned in an **always_ff** cannot be assigned by another procedure
+  * Contains one and only one event control
+  * Cannot conation any block timing
+  
+  ```sv
+  always_ff @ (posedge clk or posedge rst)
+    if (rst)
+      op <= 1'b1;
+    else
+      op <= ip;
+  ```
