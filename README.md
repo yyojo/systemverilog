@@ -221,8 +221,6 @@ foever begin
 end
 ```
 
-
-
 ### Jump Statements
 SystemVerilog adds the break and continue keyword to control execution of any kind of loop statement.
 * **break**
@@ -358,27 +356,27 @@ The Verilog **always** block can synthesize to combinational, latched or sequent
   * Sensitive to changes in any input to a called function
   * Automatically executed once at time 0 without waiting for an event - after all **initial** and **always** blocks have executed
   
-  ```sv
-  always_l // no warnings or errors
-    if (sel == 1) 
-      op = a;
-    else
-      op = b;
+```sv
+always_l // no warnings or errors
+  if (sel == 1) 
+    op = a;
+  else
+    op = b;
 
-  ---------------
+---------------
   
-  logic op;
-  always_comb 
-     if (sel1) 
-       op = a;
-     else
-       op = b;
-  always_comb // error - op variable assigned by another procedure
-     if (sel2) 
-       op = a;
-     else
-       op = b;    
-  ```
+logic op;
+always_comb 
+   if (sel1) 
+     op = a;
+   else
+     op = b;
+always_comb // error - op variable assigned by another procedure
+   if (sel2) 
+     op = a;
+   else
+     op = b;    
+```
 * <ins>**always_latch**</ins>
 
   * SystemVerilog adds a specialized procedutal block for modeling latched logic
@@ -387,21 +385,21 @@ The Verilog **always** block can synthesize to combinational, latched or sequent
   * Sensitivw to changes in any input to a called function
   * Automatically executed once at time 0 without waiting for an event - after all **initials** and **always** have executed
   
-  ```sv
-  always_latch // no warnings or errors
-    if (gate == 1)
-      op <= a;
+```sv
+always_latch // no warnings or errors
+  if (gate == 1)
+    op <= a;
   
-  ---------------
+---------------
   
-  always_latch
-     if (en1) 
-       op <= a;
+always_latch
+   if (en1) 
+     op <= a;
 
-  always_comb // error - op variable assigned by another procedure
-     if (en2) 
-       op <= b;  
-  ```
+always_latch // error - op variable assigned by another procedure
+   if (en2) 
+     op <= b;  
+```
   
 * <ins>**always_ff**</ins>
 
@@ -410,13 +408,13 @@ The Verilog **always** block can synthesize to combinational, latched or sequent
   * Contains one and only one event control
   * Cannot conation any block timing - for example can't have #delay inside the block
   
-  ```sv
-  always_ff @ (posedge clk or posedge rst)
-    if (rst)
-      op <= 1'b1;
-    else
-      op <= ip;
-  ```
+```sv
+always_ff @ (posedge clk or posedge rst)
+  if (rst)
+    op <= 1'b1;
+  else
+    op <= ip;
+```
 
 ## Operators
 ----
@@ -437,36 +435,36 @@ These combine a blocking assignment and an increment or decremnet operator.
 * Pre-form **++variable , --variable** adds or subtracts and then uses the new value.
 * Post-form **variable++ , variable--**  uses the new value and then adds or subtracts.
 
-  ```sv
-  initial begin
-    b = 1;
-    a = b++; // post a = 1, b = 2
-    a = ++b; // pre a = 3 , b = 3
-    a = b--; // post a = 3, b = 2
-    a = --b; // pre a = 1 , b = 1
-  end
-  ```
+```sv
+initial begin
+  b = 1;
+  a = b++; // post a = 1, b = 2
+  a = ++b; // pre a = 3 , b = 3
+  a = b--; // post a = 3, b = 2
+  a = --b; // pre a = 1 , b = 1
+end
+```
   
 ### Wildcard Equivalence Operator
 The wild equality operator **==?** and inequality operator **!=?** treat X and Z values in a given bit position as a wildcard. A wildcard bit matches any bit value (0, 1,Z, or X) in the value of the expression being compared against it.
 * An X, Z, or ? in the right operand matches any value in the left
 * Asymmetric - only right side can have wildcatd bits
 
-  ```sv
-  a = 4'b0101;
-  b = 4'b01XZ;
+```sv
+a = 4'b0101;
+b = 4'b01XZ;
   
-  if (a == b) // unknown
-    •••
-  if (a === b) // false
-    •••
-  if (a ==? b) // true
-    •••
-  if (a !=? b) // flase
-    •••
-  if (a ==? 4'b?1?1) // true
-    •••
-  ```
+if (a == b) // unknown
+  •••
+if (a === b) // false
+  •••
+if (a ==? b) // true
+  •••
+if (a !=? b) // flase
+  •••
+if (a ==? 4'b?1?1) // true
+  •••
+```
 Remember that Verilog has two (in)equality operators:
 * Logical (in)equality **==** 
 * Identity (in)equLITY **===**
