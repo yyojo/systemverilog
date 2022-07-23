@@ -202,7 +202,7 @@ do begin
 end while(condition)
 ```
 
-### Repeat Loop Statements**</ins>
+### Repeat Loop Statements
 A given set of statement can be executed N number of times with a **repeat** consruct.
 
 ```sv
