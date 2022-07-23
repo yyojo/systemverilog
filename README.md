@@ -417,3 +417,6 @@ The Verilog **always** block can synthesize to combinational, latched or sequent
     else
       op <= ip;
   ```
+
+## Operators
+----
