@@ -566,3 +566,17 @@ An enumerated type is set of integral named constants.
 * Enumerated types are strongly types
 * Should only be directly assigned - a named balue of the type , a variable of the same type
 * Naming the type (**typedef**) permits typecasting - **type_name' (value)**
+
+
+```sv
+typedef enum {idle , start , pause , done} state_t; // named enum type
+state_t state, next_state;
+
+enum {idle , start , pause , done} astate;
+
+state = idle;
+state = next_state; 
+state = 2'b00; // not legal direct assignment of Integral value to enum variable is not allowed
+state = 2; // not legal direct assignment of Integral value to enum variable is not allowed
+state = state_t'(2);
+```
