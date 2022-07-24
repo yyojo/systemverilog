@@ -477,6 +477,7 @@ The difference is that equivalence sign can have an unknown value. (if a == b an
   * List values can be variables (including arrays) and ranges
   * List values can hve wildcards
   * List values can have overlap
+
 ```sv
 if (variable indside {2'b01 , 2'b10}) // equivalent to 
                                       // if ((a == 2'b01) || (a == 2'b10))
@@ -491,4 +492,19 @@ if (variable indside {2'b0?}) // equivalent to
                                     // if (variable inside {2'b00 , 2'b01 , 2'b0X , 2'b0Z})
   •••
 ```
+You can also use **inside** with the **case** statement:
+
+```sv
+bit [3:0] a;
+case (a) inside
+  0 , 2 : $display ("0 or 2);
+  [3:5] : $display ("3 or 4 or 5");
+  1 , [6:7] : $display ("1 or 6 or 7");
+  default : $display ("value > 7");
+endcase
+```
+### Operators Precedence and Associativity
+
+![Uploading Screen Shot 2022-07-24 at 09.22.02.png…]()
+
 
