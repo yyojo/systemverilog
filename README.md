@@ -635,7 +635,7 @@ typedef enum bit[3:0]
 // enum decleration with explicit base type and explicit encoding
 ```
 
-<ins>**Assigning Enumerate Base Type Explicitly**</ins>
+<ins>**Enumerated Base Type vs. Enum Initial Value**</ins>
 
 * The initial vaule of an enum variable depends on its base type - 0 for default int type and any 2-state type and X for explicit 4-state type
 * You can explicity encode a value with X - typically to indicate an illegal value
@@ -646,7 +646,6 @@ initial begin
   $display ("value %b", animals);
   $display ("name %s" , animals.name()); 
   // value - 000 , name - DOG
-
 
 enum logic[2:0] {RED , BlUE} colors; 
 initial begin 
@@ -660,3 +659,52 @@ initial begin
   $display ("name %s" , names.name()); 
   // value - xxx , name - Jack
 ```
+
+<ins>**Enumerated Type Access Methods**</ins>
+
+<img width="786" alt="Screen Shot 2022-07-24 at 14 47 06" src="https://user-images.githubusercontent.com/109002901/180645513-9d22bc10-1b23-48d8-a7a6-92f55897ac9b.png">
+
+```sv
+typedef enum {YELLOW , RED ,BLUE , GREEN} colors;
+colors color = colors.first();
+
+repeat(color.num() + 1) begin 
+  $display("%s = %0d" , color.name() , color);
+  if (color = color.last())
+    $display("----");
+  color= colors.next();
+end
+```
+
+### Structures
+A structure represent a collection of data types that can be refrenced as a whole, or the individual data types that make up the structure can be referenced by name.
+* Declare using **struct** keyword
+* Use the "dot" notation to access individual fields
+* You can make pattern assignments to structures - orded or keyed , but not both in the same pattern. Keys can be by name, type, default or a mix of these
+* You can declate arrays of structures
+* Structures can be nested
+
+```sv
+typedef struct { logic id,par ;
+                 logic [3:0] address ;
+                 logic [7:0] data;
+                } frame_t;
+
+frame_t frame1;
+logic [7:0] data_in;
+
+// individual field access 
+frame1.id = 1'b1;
+data_in = frame1.data;
+
+// ordered assignment pattern
+frame1 = '{1'b1 , 1'b0 , 4'b1 , 8'b1010}
+
+// named assignment pattern
+frame1 = '{id:0 , par:1 , address: 0 , data: 1};
+
+frame two_frame_arr [1:0];
+// nested ordered assginment pattern
+two_frame_arr = '{'{0,0,0,225} , '{1,1,1,0}};
+```
+
