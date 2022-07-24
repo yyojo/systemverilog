@@ -588,7 +588,7 @@ a_int = state * 2; // 16
 * An enumerated type is the base type with mnemonics for specific values
 * An enumerate variable in expression is replaced by its base type value
 
-<ins>**How to Assign Enumerate Value Encodings Explicitly**</ins>
+<ins>**Assigning Enumerate Value Encodings Explicitly**</ins>
 
 Explicit encoding can be included in an enumerated type declaration, either typed or anonemous which allows one-hot , grey or other encodings to be defined for enumerated values.
 * You can define explicit encoding for values - allows one-hot coding 
@@ -612,4 +612,51 @@ You can use range notation for simple value name sequences and can mix ranged an
 typedef enum {go , R[3:5] , stop} seq_t;
 // equivalent to 
 typedef enum {go , R3 , R4 , R5 , stop} seq_t;
+```
+
+<ins>**Assigning Enumerate Base Type Explicitly**</ins>
+
+* You can specifiy the enumeration base type - base type in by default
+* This allows you to constrain the enumerate value range
+* The default value encoding will match the specified base type
+* Explit value encoding mush match type and length
+* An explicit base typ makes enumerates easier and safer to use
+
+```sv
+typedef enum bit[1:0] {idle , start , pause , done} state_t; 
+// idle = 2'b00 ; start = 2'b01 ; pause = 2'b10 ; done = 2'b11
+// enum declaration with explicit base type and implicit encoding
+
+typedef enum bit[3:0] 
+             {idle = 3'b000 ,
+              start = 3'b001 , 
+              pause = 3'b010 , 
+              done = 3'b011} state_t;
+// enum decleration with explicit base type and explicit encoding
+```
+
+<ins>**Assigning Enumerate Base Type Explicitly**</ins>
+
+* The initial vaule of an enum variable depends on its base type - 0 for default int type and any 2-state type and X for explicit 4-state type
+* You can explicity encode a value with X - typically to indicate an illegal value
+
+```sv
+enum bit[2:0] {DOG , CAT} animals; 
+initial begin 
+  $display ("value %b", animals);
+  $display ("name %s" , animals.name()); 
+  // value - 000 , name - DOG
+
+
+enum logic[2:0] {RED , BlUE} colors; 
+initial begin 
+  $display ("value %b", colors);
+  $display ("name %s" , colors.name()); 
+  // value - xxx , name - EMPTY STRING
+ 
+enum logic[2:0] {Jack = 3'bX , Nick = 3'b001} names; 
+initial begin 
+  $display ("value %b", names);
+  $display ("name %s" , names.name()); 
+  // value - xxx , name - Jack
 ```
