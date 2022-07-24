@@ -708,3 +708,31 @@ frame two_frame_arr [1:0];
 two_frame_arr = '{'{0,0,0,225} , '{1,1,1,0}};
 ```
 
+Structure can use either ordered or keyed assignment patterns for assigning values to structure elements.
+Order of precedence:
+1. Name - assign fields by name
+2. Type - assgin remaning fields of the specific type
+3. Default - assign remaing fields using default. Value must be type compatible with all remaining fields
+
+All fields mush have an assignment.
+
+```sv
+typedef struct { logic id,par ;
+                 logic [3:0] address ;
+                 logic [7:0] data;
+                } frame_t;
+
+frame_t frame1;
+
+// assignment by order
+frame1 = '{1'b1 , 1'b0 , 4'b1 , 8'b1010}
+
+// assignment by name 
+frame1 = '{id:0 , par:1 , address: 0 , data: 1};
+
+// assignment by name and type
+frame1 = '{id:0 , address: 0 , logic : 1};
+
+// assignment by name, type and default
+frame1 = '{id:0 , logic : 1 , default : 0};
+```
