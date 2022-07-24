@@ -800,4 +800,25 @@ Verilog has to ways to connect ports:
 SystemVerilog adds to options to simplify port connections: **.name** and ** .* **.
 
 ## Implicit Port Connection - .name
-* Where
+* Where signal and port names match, just use **.clk = .clk(clk)**
+* It can be mixed with a named connection - for ports where names do not match
+* Signals used in **.name** must be explicity declared
+
+```sv
+module count (
+  input logic clk, rst, ld, 
+  inputy logic [7:0] data, 
+  output logic [7:0] cnt' 
+  output logic val);
+  •••
+endmodule
+
+// .name port connection
+count c1 (.clk , .rst , .ld , .data , .cnt , .val);
+
+// named equivalent
+count c1 (.clk(clk) , .rst(rst) , .ld(ld) , .data(data) , .cnt(cnt) , .val(val));
+
+// .name and named
+count c1 (.data , .clk , .rst(reset) , .ld(load), .cnt , .val(val));
+```
