@@ -505,6 +505,6 @@ endcase
 ```
 ### Operators Precedence and Associativity
 
-![Uploading Screen Shot 2022-07-24 at 09.22.02.png…]()
+<img width="1929" alt="Screen Shot 2022-07-24 at 09 23 13" src="https://user-images.githubusercontent.com/109002901/180635092-88ef5fa7-d268-47c3-bb9f-153cc82f2def.png">
 
 
