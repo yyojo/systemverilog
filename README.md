@@ -507,4 +507,30 @@ endcase
 
 <img width="1929" alt="Screen Shot 2022-07-24 at 09 23 13" src="https://user-images.githubusercontent.com/109002901/180635092-88ef5fa7-d268-47c3-bb9f-153cc82f2def.png">
 
+### Array Assignment Patterns
+* Define a list of values for an assignment to array elements and structure fields
+* It is equivalent to individual assignments - un-sized literals are allowed
+* Patten "keys" can be used - arrays element index , **default** keyword
+* There must be a pattern value for every array element
+
+```sv
+int arr [3:0];
+
+arr = '{0,1,2,3}; // forward apostrophe before {•••} used for array assignment patterns
+/* equivalent to 
+arr[3] = 0;
+arr[2] = 1;
+arr[1] = 2;
+arr[0] = 3;
+*/
+
+arr = '{3:1 , default : 0} // index:value
+/* equivalent to 
+arr[3] = 1;
+arr[2] = 0;
+arr[1] = 0;
+arr[0] = 0;
+*/
+```
+
 
