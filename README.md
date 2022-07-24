@@ -817,8 +817,34 @@ endmodule
 count c1 (.clk , .rst , .ld , .data , .cnt , .val);
 
 // named equivalent
-count c1 (.clk(clk) , .rst(rst) , .ld(ld) , .data(data) , .cnt(cnt) , .val(val));
+count c2 (.clk(clk) , .rst(rst) , .ld(ld) , .data(data) , .cnt(cnt) , .val(val));
 
 // .name and named
-count c1 (.data , .clk , .rst(reset) , .ld(load), .cnt , .val(val));
+count c3 (.data , .clk , .rst(reset) , .ld(load), .cnt , .val(val));
+```
+
+## Implicit Port Connection - .*
+* Where all signal and port names match, just use ** .* **
+* It automatically connects ports to signals of the same name
+* There is safety of named connection without the verbositiy - can lose some port list readability
+* It can be mixed with a named connection - for ports where names do not match
+* Signals used in ** .* ** must be explicity declared
+
+```sv
+module count (
+  input logic clk, rst, ld, 
+  inputy logic [7:0] data, 
+  output logic [7:0] cnt' 
+  output logic val);
+  •••
+endmodule
+
+// .* port connection
+count c1 (.*);
+
+// .name equivalent
+count c2 (.clk , .rst , .ld , .data , .cnt , .val);
+
+// .* and named
+count c3 (.* , .rst(reset) , .ld(load));
 ```
