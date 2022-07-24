@@ -766,24 +766,6 @@ New Type Declaration Regions are spaces used to share parameters, data, type, ta
 * You can declare ports of user-defined types, but you mush declare types before you use them
 * SystemVerilog has two new name spaces - packages and Compliation Unit Scope (CUS) (to be avoided)
 
-```sv
-// package declaration
-package mytypes;
-  typedef enum {start , done} status_t;
-  •••
-endpackages : mytypes
-```
-
-```sv
-// package imported in module header
-module top import mytypes::* ; 
-  (input logic [7:0] in,
-  output status_t status);
-  
-  status_t status_task;
-  •••
-```
-
 <ins>**Compliation Unit Scope (CUS)**</ins>
 
 * New scope for declarations is outside of design elements (modules, interfaces, etc.)
@@ -801,7 +783,36 @@ module top // NOT RECOMMENDED
   output logic [7:0] out);
   •••
 ```
+<ins>**Packages**</ins>
+* New design element similar to module - must be cimpiled separately and must be compiled before elements that reference the package
+* They contain declarations to be shared between elements (type, variables, subroutines..)
+* You can **import** package declarations - explicit - specifically namrf and implicit - all using wildcards ( * )
+* Or directly access a declaration using the resolution operator **::** - does not require import
 
+```sv
+// package declaration
+package mytypes;
+  typedef enum {start , done} status_t;
+  •••
+endpackages : mytypes
+```
+
+```sv
+import mytypes::status_t; // explicit import
+module top1 (input status_t status);
+  •••
+
+module top2 import mytypes::* ; // wildcard import
+  (input logic [7:0] in,
+  output status_t status);
+  
+  status_t status_task;
+  •••
+  
+module top3 (•••);
+  mytypes::status_t status
+  •••
+```
 
 ## Hirearchy and Connectivity
 ----
