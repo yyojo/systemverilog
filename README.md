@@ -264,7 +264,7 @@ initial begin
 end
 ```
 
-* * <ins>**unique case**</ins>
+* <ins>**unique case**</ins>
 
   * Modifier to the case statement
   * Synthesis: Equivalent to the **full_case** and **parallel_case** attribute in Verilog
@@ -570,7 +570,7 @@ An enumerated type is set of integral named constants.
 
 ```sv
 typedef enum {idle , start , pause , done} state_t; // named enum type
-state_t state, next_state;
+state_t state, next_state; // idle = 0 ; start = 1 ; pause = 2 ; done = 3
 
 enum {idle , start , pause , done} astate;
 
@@ -578,5 +578,38 @@ state = idle;
 state = next_state; 
 state = 2'b00; // not legal direct assignment of Integral value to enum variable is not allowed
 state = 2; // not legal direct assignment of Integral value to enum variable is not allowed
-state = state_t'(2);
+state = state_t'(2); // pause
+state = state_t'(8) // no name
+a_int = state * 2; // 16
+```
+* Default base type of an **enum** is **int**
+* Default values increment from zero in declaration order
+* An enumerate variable can hold any value from the base type - even if there is no matching enumerate value name. Casting does not check value
+* An enumerated type is the base type with mnemonics for specific values
+* An enumerate variable in expression is replaced by its base type value
+
+<ins>**How to Assign Enumerate Value Encodings Explicitly**</ins>
+
+Explicit encoding can be included in an enumerated type declaration, either typed or anonemous which allows one-hot , grey or other encodings to be defined for enumerated values.
+* You can define explicit encoding for values - allows one-hot coding 
+* You can mix explicity and implicit value encoding - implicit values increment from previous explicit value
+* Value encodings must be unique - compliation error is repoorted if encodings overlap
+
+```sv
+typedef enum {idle = 1 ,
+              start = 2 , 
+              pause = 4 , 
+              done = 8} state_t;
+
+enum {s0 = 0 , s1 , s2 = 6 , s3} encs; // s1 = 1 - index 1 , s3 = 3 , index 3 
+
+enum {p0 = 0 , p1 ,p2 = 1 , p3} bad_encs // p2 duplicates p1 encoding
+```
+
+You can use range notation for simple value name sequences and can mix ranged and unranged values.
+
+```sv
+typedef enum {go , R[3:5] , stop} seq_t;
+// equivalent to 
+typedef enum {go , R3 , R4 , R5 , stop} seq_t;
 ```
