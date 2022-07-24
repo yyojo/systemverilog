@@ -533,4 +533,36 @@ arr[0] = 0;
 */
 ```
 
+## User-Defined Data Types and Structures
+----
+### User-Defined Types
+* Primitive Data Types - Built-in types not constructed from other data types (bit , integer, real ,logic)
+* User-Defined Types - SystemVerilog's data types can ve extended with user-defined types using **typedef**
 
+User-defined data types are:
+* Types named after **typedef**
+* Types constructedfrom other types such as vectors and arrays
+* Enumerate (**enum**) types for user-defined value sets
+* Structure (**struct**) types to bundle multiple variables into one object
+* **union** types to store different data types in the same space
+* Placing **__t** after typedef is a valuable convention for reminding you that this is a user-defined type
+* The declaration must be visible in the scope where the names is used
+* The type name can be used anywhere, the type declaration is legal
+* An un-named type is known as an anonymous type
+
+```sv
+typedef logic [7:0] vec; // typedef is used to give user-defined name to existing
+                         // logic data type
+•••
+vec vec1, vec2; // the named data type can be used now to declare other variables
+
+logic [16:0] wordvar // anonymous type
+```
+
+### Enumerated Types
+An enumerated type is set of integral named constants.
+* It is a type with user-defined values - value names must be unique in the current scope
+* Declared with the **enum** keyword - named or anonymous
+* Enumerated types are strongly types
+* Should only be directly assigned - a named balue of the type , a variable of the same type
+* Naming the type (**typedef**) permits typecasting - **type_name' (value)**
