@@ -762,6 +762,7 @@ initial begin
 ```
 
 ### New Type Declaration Regions
+New Type Declaration Regions are spaces used to share parameters, data, type, task, function, sequence, property and checker declaration among multiple SV modules interfaces, programs and checkers
 * You can declare ports of user-defined types, but you mush declare types before you use them
 * SystemVerilog has two new name spaces - packages and Compliation Unit Scope (CUS) (to be avoided)
 
@@ -778,6 +779,8 @@ endpackages : mytypes
 module top import mytypes::* ; 
   (input logic [7:0] in,
   output status_t status);
+  
+  status_t status_task;
   •••
 ```
 
@@ -790,6 +793,12 @@ module top // NOT RECOMMENDED
   output logic [7:0] out);
   •••
 ```
+
+<ins>**Compliation Unit Scope (CUS)**</ins>
+
+* New scope for declarations is outside of design elements (modules, interfaces, etc.)
+* Default scope is a single file 
+
 
 ## Hirearchy and Connectivity
 ----
@@ -870,3 +879,5 @@ count c3 (.data , .clk , .cnt , .val , .rst(reset) , ld(load)); // .name and nam
 
 count c4 (.* , .rst(reset) , .ld(load));
 ```
+
+<img width="1870" alt="Screen Shot 2022-07-24 at 17 41 23" src="https://user-images.githubusercontent.com/109002901/180652229-6f27121a-c84d-461e-9d36-8f559cb1f3e1.png">
