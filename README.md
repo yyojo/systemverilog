@@ -848,3 +848,25 @@ count c2 (.clk , .rst , .ld , .data , .cnt , .val);
 // .* and named
 count c3 (.* , .rst(reset) , .ld(load));
 ```
+
+### Rules for Using .name and ,*
+* In an instatiation:
+  * Ordered connections with **.name** or ** .* ** cannot be mixed
+  * **.name** and ** .* ** connections cannot be mixed
+  * Named and **.name** connections can be mixed
+  * Named and ** .* ** connections can be mixed
+
+* Named Connections are required for:
+  * Port/signal name mismatches
+  * Port/signal width mismatches
+  * Unconneceted ports
+
+```sv
+count c1 (clock , reset , .*); // error - ordered and .*
+
+count c2 (.clk , .rst , .*); // error - .name and .*
+
+count c3 (.data , .clk , .cnt , .val , .rst(reset) , ld(load)); // .name and named
+
+count c4 (.* , .rst(reset) , .ld(load));
+```
