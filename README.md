@@ -790,3 +790,14 @@ module top // NOT RECOMMENDED
   output logic [7:0] out);
   •••
 ```
+
+## Hirearchy and Connectivity
+----
+Verilog has to ways to connect ports:
+1. Ordered Port Connections - have the risk of incorreclty ordered connections
+2. Named Port Connections - safer but ver verbose (.port_name(signal_name))
+
+SystemVerilog adds to options to simplify port connections: **.name** and ** .* **.
+
+## Implicit Port Connection - .name
+* Where
