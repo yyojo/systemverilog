@@ -736,3 +736,57 @@ frame1 = '{id:0 , address: 0 , logic : 1};
 // assignment by name, type and default
 frame1 = '{id:0 , logic : 1 , default : 0};
 ```
+<ins>**Packed Structure**</ins>
+
+Packed structure feilds are packed together in memory without gaps ans can be use as a whole arithmetic and logical operators.
+* Structures can be packed
+* All fields must be packable - integrals values only and any fields that is array or structure mush also be packed
+* A packed structure can be treated as a one dimentional vector - can still use dot notation to access individual structure fields
+* If any field is 4-state then the whole structure is stored as 4-state - conversions are done automatically upon read/write
+* You cannot slice unpacked structure
+* Avoid mixing 2-state and 4-state types
+
+<img width="1025" alt="Screen Shot 2022-07-24 at 16 05 50" src="https://user-images.githubusercontent.com/109002901/180648339-a9602a6d-ffa3-438c-844f-1a54578db495.png">
+
+```sv
+typedef struct packed { logic id,par ; // all fields a 4-state
+                 logic [3:0] address ;
+                 logic [7:0] data;
+                } frame_t;
+
+frame_t frame1;
+logic [3:0] buff;
+initial begin
+  buff = frame1.address; 
+  buff = frame1[11:8]; // same field as frame1.address
+```
+
+### New Type Declaration Regions
+* You can declare ports of user-defined types, but you mush declare types before you use them
+* SystemVerilog has two new name spaces - packages and Compliation Unit Scope (CUS) (to be avoided)
+
+```sv
+// package declaration
+package mytypes;
+  typedef enum {start , done} status_t;
+  •••
+endpackages : mytypes
+```
+
+```sv
+// package imported in module header
+module top import mytypes::* ; 
+  (input logic [7:0] in,
+  output status_t status);
+  •••
+```
+
+```sv
+// declaration CUS
+typedef enum {start , done} status_t;
+
+module top // NOT RECOMMENDED
+  (input status_t status,
+  output logic [7:0] out);
+  •••
+```
