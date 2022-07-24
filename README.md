@@ -469,4 +469,26 @@ Remember that Verilog has two (in)equality operators:
 * Logical (in)equality **==** 
 * Identity (in)equLITY **===**
 
-The difference is that equivalence sign can have an unknown value. (if a == b and b has some unknowns -> unknown, but if  a === b and b has some unknowns in it , the result will be true if a also has unknowns in that particular bit positions, else result is false)
+The difference is that equivalence sign can have an unknown value. (if a == b and b has some unknowns -> unknown, but if  a === b and b has some unknowns in it , the result will be true if a also has unknowns in that particular bit positions, else result is false).
+
+### Set Membership Operator (inside)
+**inside** does a comparison:
+  * True if expression value is contained within a values list
+  * List values can be variables (including arrays) and ranges
+  * List values can hve wildcards
+  * List values can have overlap
+```sv
+if (variable indside {2'b01 , 2'b10}) // equivalent to 
+                                      // if ((a == 2'b01) || (a == 2'b10))
+  •••
+  
+int bar [1:0] = '[5,6];
+if (variable indside {bar , [2;0]}) // equivalent to 
+                                    // if (variable inside {bar[1] . bar[2] , 0 , 1 , 2})
+  •••
+  
+if (variable indside {2'b0?}) // equivalent to 
+                                    // if (variable inside {2'b00 , 2'b01 , 2'b0X , 2'b0Z})
+  •••
+```
+
