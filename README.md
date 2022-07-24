@@ -784,6 +784,14 @@ module top import mytypes::* ;
   •••
 ```
 
+<ins>**Compliation Unit Scope (CUS)**</ins>
+
+* New scope for declarations is outside of design elements (modules, interfaces, etc.)
+* Default scope is a single file - tools options can change this, for example: defining scope as multiple files compiled at same time
+* Scope is unnamed - cannot make hierarchical references to declarations
+* Local declarations override declarations in CUS - use **$unit::** to access CUS declrations
+* Scope of compliation unit is tool-specific and can change between compile sessions. Local declarations override CUS declarations.
+
 ```sv
 // declaration CUS
 typedef enum {start , done} status_t;
@@ -793,11 +801,6 @@ module top // NOT RECOMMENDED
   output logic [7:0] out);
   •••
 ```
-
-<ins>**Compliation Unit Scope (CUS)**</ins>
-
-* New scope for declarations is outside of design elements (modules, interfaces, etc.)
-* Default scope is a single file 
 
 
 ## Hirearchy and Connectivity
