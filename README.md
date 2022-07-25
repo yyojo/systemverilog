@@ -1262,4 +1262,29 @@ endfunction
 ### Argument Passing by Value
 For the code shown below, will this work as expected? 
 * This is the default method of argument passing
-* Its is the same as in Veriloog 2021 but can also pass new data types: array, structures, unions, classes
+* Its is the same as in Veriloog 2021 but can also pass new data types: array, structures, unions, classes, etc.
+* Values copied in on call - subroutines then unaware of input changes
+* Values copied out on return - Environment meanwhile unaware of output changes
+* Issue for testbench tasks
+
+```sv
+logic reg; 
+logic ack;
+logic [7:0] data;
+
+task cpu_drive_bad (input logic [7:0] write_data,
+                    input logic data_valid, 
+                    output logic data_read, 
+                    output logic [7:0] cpu_data);
+
+  #5 data_read = 1;
+  wait (data_valid == 1); // The wait statement blocks the current process until the expression becomes true.
+                          // input changes not detected
+  #20 cpu_data = write_data;
+  wait (data_valid == 0);
+  #20 cpu_data = 8'hzz; // only last output updates seen
+  data_read = 0;
+  
+endtask : cpu_drive_bad
+
+```
