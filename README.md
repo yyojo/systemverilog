@@ -1042,3 +1042,29 @@ module top import P1::*;( // import in module header, must include semicolon
   •••
 endmodule
 ```
+
+## Static Arrays
+----
+### Arrays
+* SystemVerilog allows arrays of any type including : events, structures and enumerates
+* Standard, Verilog-like arrays are defined as unpacked - index declared ather name and elements are stored separately
+* Assignment patterns can be used to assign unpacked arrays
+
+```sv
+int mat [2:0] [1:0]; // 2D array of int 
+
+typedef enum bit [1:0]; {s0 ,s1, s2, s3} seq_t;
+seq_t seq5 = [4:0]; // array of enums
+
+logic [7:0] unpack [1:0]; // unpacked array of bytes
+
+// logic [7:0] [1] equivalent to unpack [1]
+// logic [7:0] [0] equivalent to unpack [0]
+
+// array assignments 
+unpack = '{8'h00 , 8'hff};
+unpack = '{default , 8'hff};
+
+
+
+```
