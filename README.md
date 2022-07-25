@@ -1286,6 +1286,9 @@ task cpu_drive_bad (input logic [7:0] write_data,
   data_read = 0;
   
 endtask : cpu_drive_bad
+•••
+cpu_drive_bad (8'hff, ack, req, data); // fornal arguments mapped to actuals in call
+•••
 ```
 
 ## Solution 1 - Variable Access by Side-Effect 
@@ -1313,6 +1316,34 @@ task cpu_drive_side (input logic [7:0] write_data);
   
 endtask : cpu_drive_side
 •••
-cpu_drive_side(8'hff); // only literals in call
+cpu_drive_side (8'hff); // only literals in call
+•••
+```
+
+## Solution 2 - Argument Passing by Reference
+* Use pass by reference by declaring arguments using **ref**
+  * Use **ref** instead of parameter direction
+  * Only variables not net
+* It creates a link between actual and formal arguments
+  * Changes in inputs can be seen in task
+  * Changes in outputs are immediately updated
+* Task mush be declared as automatic
+
+```sv
+task cpu_drive_ref (input logic [7:0] write_data,
+                    ref logic data_valid, 
+                    ref logic data_read, 
+                    ref logic [7:0] cpu_data);
+
+  #5 data_valid = 1; // all output updates seen
+  wait (data_read ==1);
+  #20 cpu_data = write_data; // inputs changes directly
+  wait (data_read ==0);
+  #20 cpu_data = 8'hzz;
+  data_valid = 0; 
+  
+endtask : cpu_drive_ref
+•••
+cpu_drive_ref (8'hff, req, ack , data); // fornal arguments mapped to actuals in call
 •••
 ```
