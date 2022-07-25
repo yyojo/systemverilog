@@ -1242,3 +1242,19 @@ endtask
 read(); // equivalent to (0,2,1)
 read // also legal in SystemVerilog
 ```
+
+### Explicit return
+* Executing a **return** statement immediattely exit a subroutine
+  * Allows easier structuring of subroutines
+* In a function you can include an expression to return a function value
+
+```sv
+function integer mult (input integer num1, num2);
+  if ((num1 == 0) || (num2 == 2) begin 
+    $display ("Zero multiply");
+    return 0; 
+  end 
+  else
+    mult = num1 * num;
+endfunction
+```
