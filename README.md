@@ -1347,3 +1347,18 @@ endtask : cpu_drive_ref
 cpu_drive_ref (8'hff, req, ack , data); // fornal arguments mapped to actuals in call
 •••
 ```
+
+### Using const with Reference Arguments
+* It can be used only with automatic (not static) subroutines - risk of outdated reference
+* Without direction, arguments may be wrriten in error - use **const_ref** to prevent the subroutine from modifying argument 
+* Its is also useful for efficiency gains - when arguments occupy large amounts of memory
+
+```sv
+task automatic create_crc (ref logic [255:] payload [1:0] •••);
+  payload = '0;
+endtask
+  
+task automatic create_crc (const ref logic [255:] payload [1:0] •••);
+  payload = '0; // constant argument cannot be modified
+endtask
+```
