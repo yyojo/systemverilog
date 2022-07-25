@@ -951,9 +951,33 @@ module top (•••);
   •••
   $display ("%h", pac::a); // resolved name to access package declaration
 ```
+
 ### Import and Export Statements
 * The import is a statement that is equivalent to data declaration
 * Declration are only visible from the import onwards
 * Fewer visibility issues
 * Better readability
 * Import do not chain - importing P1 into P2 and then P2 into top does not make P1 declarations visible in top. P1 mush be separately imported into top or add an export to P2 to make P1 visible as part of P2 ** export P1::* ** (rarely used)
+* Place import at the beginning of the desgin element
+
+```sv
+package P1;
+  int a1 = 5;
+  •••
+endpackage : P1
+
+package P2;
+  import P1::*;
+  int a2 = a1;
+  •••
+endpackage : P2
+
+module top (•••); 
+  logic [7:0] d = a2; // error - a2 undefined
+  
+  import P2::*;
+  initial begin
+    $display("%0d" , a2);
+    $display("%0d" , a1); // error - a1 undefined
+
+```
