@@ -1129,3 +1129,28 @@ In Verilog :
 
 * Static Subroutines - only one copy exists and concurrent calls can overwrite each other's arguments and variables
 * Automatic Subroutines - new copy for every call, concurrent calls each have their own set of arguments and variables, arguments assignment must be blocking
+
+### Optional begin / end and Named Ends
+* You can omit the **begin** and **end** keywords
+* You can repeat the subroutine name with **endtask** or **endfunction** - SystemVerilog verifies that it is the same name 
+
+```sv
+function [7:0] flip (input [7:0] word
+  •••
+endfunction : flip
+```
+
+### Void Functions
+* You can daclare functions that do not reaturn a value - define return type **void**
+* You can call a a void function as a statement - all restrictions still apply 
+* void can also be used to discard a function return value - by casting the return type to **void**
+
+```sv
+function void printer (input int errs);
+  if (errs = 0)
+    $display ("No Errors");
+  else
+    $display ("%0d Errors", errs);
+endfunction
+endfunction : flip
+```
