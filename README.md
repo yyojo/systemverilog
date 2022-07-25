@@ -1158,3 +1158,28 @@ endfunction : flip
 ### Function Output Arguments 
 * You can provie **input , output** and **inout** function arguments - argument default is **input** of type logic, **output/inout** arguments let functions return multiple values, **output/inout**  arguments let void functions return values
 * Function becomes a general-purpose synthesizable subroutine
+
+```sv
+function void adder (input [7,0] a,b 
+                       output carry); // the output is change by reference
+                      
+  logic [7:0] result;
+  {carry, result} = a + b;
+  
+ end function
+ 
+ logic [7:0] a, b, sum;
+ logic cry;
+ 
+ sum = adder(a , b, , cry) // sum = result, cry = carry (changed by reference)
+```
+
+```sv
+function void adder (integer a,b 
+                       output integer sum); // the output is change by reference
+  sum = a + b;
+endfunction
+
+always @ (a , b) // return nothing, sum changed
+  add (a ,b ,sum)
+```
