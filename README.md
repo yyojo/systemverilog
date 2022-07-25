@@ -194,6 +194,7 @@ The **while** loop excutes a group of statements untill **expression** become fa
 * In **while** loops, the expression is checked at the beginning.
 * In **Do...While** loops the expression is checked after statements execute.
 In **Do...While** loops the statement block executes at least once.
+
 ```sv
 while (condition) begin
   •••
@@ -1391,3 +1392,30 @@ SystemVerilog port mapping rules also apply to interfaces.
 * You can map by position (order) or name
 * You can use **.name** mapping if instance name matches port name
 * You can use ** .* ** mapping id all names match
+
+
+### How to Access Items Through Module Ports Bound to the Interface Instance
+For a module with an **interface** **port** you access interface items using the port name as a prefix.
+
+```sv
+interface ifa; 
+  logic req, start, gnt, rdy;
+  logic [1:0] mode;
+  logic [7:0} addr;
+  wire [7:0] data;
+  •••
+endinterface : ifa
+```
+
+```sv
+module memory (input bit clk , ifa bus); // pass the interface as port bus
+  reg [31:0] mem [0:31];
+  logic read, write;
+  assign read = (bus.gnt && (bus.mode == 0) );
+  assign write = (bus.gnt && (bus.mode == 0) ); // access the interface item using module port name
+  always @(posedge clk)
+    if (write)
+      mem[bus.addr] = bus.data;
+    assign bus.data = read ? mem[bus.addr] : 'z;
+endmodule
+```
