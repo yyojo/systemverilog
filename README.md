@@ -895,3 +895,36 @@ count c4 (.* , .rst(reset) , .ld(load));
 ```
 
 <img width="1870" alt="Screen Shot 2022-07-24 at 17 41 23" src="https://user-images.githubusercontent.com/109002901/180652229-6f27121a-c84d-461e-9d36-8f559cb1f3e1.png">
+
+### Explicit Import 
+An explicit impot only imports the symbols speciciallty ferenced by the import.
+* Explicit import directly loads declaration into module
+* Declaration must be unique in the current scope
+* Only the sybols specifically referenced are imported
+* An explicit import in a CUS follows compliaiton unit rules - local declarations override CUS declaration (even for explicit import). CUS should be avoided if possible
+
+```sv
+package pac;
+  localparam int a = 10;
+  typedef enum {start , stop} mode_t;
+endpackage : pac
+
+module top (•••);
+  import pac::a;
+  import pac::mode_t;
+  
+  logic [7:0] a; // error - local a clashes with pac::a
+  mode_t mode;
+  •••
+  if (mode == stop) // error - unkown identifier (use pac::stop)
+```
+
+However in CUS import: 
+
+```sv
+import pac::a;
+module top (•••);
+  
+  logic [7:0] a; // local a takes precedence
+  •••
+```
