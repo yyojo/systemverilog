@@ -979,5 +979,39 @@ module top (•••);
   initial begin
     $display("%0d" , a2);
     $display("%0d" , a1); // error - a1 undefined
+endmodule
+```
 
+### Ambiguity and Resolved Names
+How to resolve ambiguous references due to: "Multiple Declarations in separare packages using same name"
+Solotions:
+* Try to avoid duplicate names
+* Structure packages carefu;;y - only required declaration visible
+* Use resolved names
+* Use explicit imports
+
+```sv
+package P1;
+  int a1 = 5;
+  •••
+endpackage : P1
+
+package P2;
+  int a1 = a8;
+  •••
+endpackage : P2
+
+// solution 1 
+module top (•••); 
+  import P1::* , P2::*;
+  logic [7:0] d = a1; // error - ambiguous
+  logic [7:0] e = P2::a1 // OK resolved
+endmodule
+
+// solution 2
+module top (•••); 
+  import P1::* , P2::*;
+  import P2::a1; // explicity importing a1 from package you want to always infer
+  logic [7:0] d = a1; // OK resolved
+endmodule
 ```
