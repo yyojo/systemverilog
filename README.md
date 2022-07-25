@@ -1064,7 +1064,34 @@ logic [7:0] unpack [1:0]; // unpacked array of bytes
 // array assignments 
 unpack = '{8'h00 , 8'hff};
 unpack = '{default , 8'hff};
+```
 
+#### Unpacked Multidimensional Arrays
+The term unpacked array is used to refet to the demensions declared after the data identifier name.
+* Unpacked dimensions are stored separately
+* You can read and write any slice from one element to a whole array - mush match size ,layout and type. Indexing precedence: left to right 
+* Assignment patterns are useful for loading unpacked arrays - keys or ordered , can be nested and also contain expressions, for example: repetition
 
+```sv
+int mat1 [2:0] [1:0] // 3x2 array of int
+int mat2 [1:3] [2:1] // 3x2 array of int
+int mat3 [15:0] [0:255] 
+•••
+mat1 = mat2; // both 3x2 arrays of int
+
+mat1[2] = mat[3] // both 2x1 arrays of it 
+
+mat1 = '{'{2,1} , '{5,4} , '{3,2}}; // nested orders assignment pattern
+// mat1[2][0] = 2
+// mat1[2][1] = 1
+// mat1[1][0] = 5
+
+mat2 = '{3{'{1,2}}}; // pattern expression
+// mat2[1][2] = 1
+// mat2[1][1] = 2
+// mat2[2][2] = 1
+
+mat3 = '{default:100} // keyed assignment
+// mat3[0][0] = 100
 
 ```
