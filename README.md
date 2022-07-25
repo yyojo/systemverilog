@@ -1093,5 +1093,28 @@ mat2 = '{3{'{1,2}}}; // pattern expression
 
 mat3 = '{default:100} // keyed assignment
 // mat3[0][0] = 100
-
 ```
+
+### Packed Arrays
+A packed array is mechanism for subdeviding a vector into subfields, witch can ve conveniently access as array alements.
+* Packed arrays - index decalred before name, stored as a single vector. they also can be operatred upon and access as a single vector and indexing precedence from left to right
+* Only signel-bit data types can be packed - bit , logic ,reg , and recursively, other packed objects of these types
+* Packed arrays obey assignment rules for padding and trunction
+* A packed array is equivalent to a vector with predefined bit fields
+
+```sv
+logic[1:0] [7:0] packarr; // packed array of bytes
+logic[7:0] short = 8'hAA; 
+logic[23:0] long = 24'h5555555
+•••
+packarr = 16'h0'
+packarr = packarr << 1;
+packarr = ~packarr;
+•••
+packarr = short; // 16'h00aa
+packarr = long // 16'h5555
+```
+
+packarr look like this:
+
+<img width="665" alt="Screen Shot 2022-07-25 at 12 40 47" src="https://user-images.githubusercontent.com/109002901/180747543-80e6ffb5-f8da-4ba0-93fe-350c47453ba1.png">
