@@ -73,21 +73,21 @@ module two (output logic y, // y is logic - assigned by a single continuous assi
 endmodule
 
 module test; 
-logic a ,b;
-logic and_out, or_out; // and_out and or_out are logic - single instance outputs
-one m1 (and_out, a, b);
-two m2 (or_out, a, b);
-initial begin
-  a = 0; // a is logic - assigned in an initial block.
-  b = 0; // b is logic - assigned in an initial block.
- end
- endmodule
+  logic a ,b;
+  logic and_out, or_out; // and_out and or_out are logic - single instance outputs
+  one m1 (and_out, a, b);
+  two m2 (or_out, a, b);
+  initial begin
+    a = 0; // a is logic - assigned in an initial block.
+    b = 0; // b is logic - assigned in an initial block.
+   end
+endmodule
  
  module test;
- logic a, b;
- wire y; 
- one m1 (y, a, b);
- two m2 (y, a, b);
+   logic a, b;
+   wire y; 
+   one m1 (y, a, b);
+   two m2 (y, a, b);
  endmodule
 ```
 
@@ -113,7 +113,8 @@ SystemVerilog introduces the **timeunit** and the **timeprecision** declarations
 'timescale 1ns / 100ps // time unit 1ns , precision 100ps
 
 module test;
-logic a, b, c, sel , clk;
+  logic a, b, c, sel , clk;
+  
 initial 
 begin 
   #20ns sel = 0; // blocking assign.
