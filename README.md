@@ -1224,3 +1224,21 @@ read (.j(2) , .l(val));  // equivalent to (2, 21, 1)
 read (.k(3)); // equivalent to (0, 3, 1)
 read (.data(7) , .j(4) , .k(3));
 ```
+
+### Optional Argument List 
+* You can omit passing arguments if all arguments have default values
+* If there are no required arguments, you can even omit the parentheses for :
+   Tasks calls 
+   Void fumction calls
+   Non recursive calls to class methods
+
+```sv
+// default value for every argument
+task read (int j = 0 , int k = 2 , int data = 1);
+•••
+endtask
+
+// invocation of task with defaukt arguments 
+read(); // equivalent to (0,2,1)
+read // also legal in SystemVerilog
+```
