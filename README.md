@@ -1101,6 +1101,7 @@ A packed array is mechanism for subdeviding a vector into subfields, witch can v
 * Only signel-bit data types can be packed - bit , logic ,reg , and recursively, other packed objects of these types
 * Packed arrays obey assignment rules for padding and trunction
 * A packed array is equivalent to a vector with predefined bit fields
+* Generally, only fully packed arrays are synthesizable (not mixed packed and unpacked)
 
 ```sv
 logic[1:0] [7:0] packarr; // packed array of bytes
