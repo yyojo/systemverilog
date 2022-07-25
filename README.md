@@ -1258,3 +1258,8 @@ function integer mult (input integer num1, num2);
     mult = num1 * num;
 endfunction
 ```
+
+### Argument Passing by Value
+For the code shown below, will this work as expected? 
+* This is the default method of argument passing
+* Its is the same as in Veriloog 2021 but can also pass new data types: array, structures, unions, classes
