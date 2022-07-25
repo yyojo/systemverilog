@@ -1369,3 +1369,18 @@ A SystemVerilog interface is, at its most basic level, simply a bundle of extern
 * Encapsulate communication between hardware blocks
 * Provide a mechanism for grouping together multiple signals into a single unit that can be passes around the design hierarchy
 * Enable abstraction in RTL design
+
+### More Facts on Interfaces
+You declare an interface as a heiratchical opject, mush like a module:
+* You instantiate it in a module, like any other heirarchical block
+* You use the interface like a type in port lists and port maps
+
+A simple interface is just named bundle of nets or variables:
+* Similar to a **struct** type
+* You can reference the nets or variables where needed
+
+Interfaces can also contaion module-like features for defining signal relationships:
+* Continuous assignments, tasks, function, initial/always block, etc.
+* Can further instantiate interfaces
+* Can be generated or arrayed
+* Cannot declare or instantiate module specific items: modules, primitives ,specify blocks and configurations
