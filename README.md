@@ -1384,3 +1384,9 @@ Interfaces can also contaion module-like features for defining signal relationsh
 * Can further instantiate interfaces
 * Can be generated or arrayed
 * Cannot declare or instantiate module specific items: modules, primitives ,specify blocks and configurations
+
+### How to Bind Interface Instance to Module Portsof Interface Type
+SystemVerilog port mapping rules also apply to interfaces.
+* You can map by position (order) or name
+* You can use **.name** mapping if instance name matches port name
+* You can use ** .* ** mapping id all names match
