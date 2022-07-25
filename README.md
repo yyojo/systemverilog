@@ -1355,10 +1355,17 @@ cpu_drive_ref (8'hff, req, ack , data); // fornal arguments mapped to actuals in
 
 ```sv
 task automatic create_crc (ref logic [255:] payload [1:0] •••);
-  payload = '0;
+  payload = '0; // var = 'num - fill the bus with num , no matter the length
 endtask
   
 task automatic create_crc (const ref logic [255:] payload [1:0] •••);
   payload = '0; // constant argument cannot be modified
 endtask
 ```
+
+## Interfaces
+----
+A SystemVerilog interface is, at its most basic level, simply a bundle of external nets and/or variables noramally shared by one or more modules by virtue of port connections. SystemVerilog provides the interface construct to:
+* Encapsulate communication between hardware blocks
+* Provide a mechanism for grouping together multiple signals into a single unit that can be passes around the design hierarchy
+* Enable abstraction in RTL design
