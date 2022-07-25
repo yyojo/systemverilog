@@ -1120,3 +1120,12 @@ packarr look like this:
 
 <img width="665" alt="Screen Shot 2022-07-25 at 12 40 47" src="https://user-images.githubusercontent.com/109002901/180747543-80e6ffb5-f8da-4ba0-93fe-350c47453ba1.png">
 
+## Tasks and Functions
+----
+In Verilog :
+* Tasks - any number of input, output ot inout and i may contain timing; @ (•••) , delay , wait
+* Functions - one ore motre input arguments only, no timing allowd (function must completee in zero time)
+* Returns single vaulue - vector , real or integer
+
+* Static Subroutines - only one copy exists and concurrent calls can overwrite each other's arguments and variables
+* Automatic Subroutines - new copy for every call, concurrent calls each have their own set of arguments and variables, arguments assignment must be blocking
