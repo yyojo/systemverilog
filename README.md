@@ -1162,7 +1162,7 @@ endfunction : flip
 ```sv
 function void adder (input [7,0] a,b 
                        output carry); // the output is change by reference
-                      
+                       
   logic [7:0] result;
   {carry, result} = a + b;
   
@@ -1182,4 +1182,25 @@ endfunction
 
 always @ (a , b) // return nothing, sum changed
   add (a ,b ,sum)
+```
+
+### Default Argument Values
+* You can specify default values for subroutine arguments
+  * SystemVerilog uses defauld values for those not paases - with rules
+  * Must have unambiguous mapping of actuals to formals
+  * It is an error for a formal parameter to not have an unambiguous value 
+
+```sv
+// default argument values in task definition 
+task read (int j = 0 , int k , int data = 1);
+•••
+endtask
+
+int val = 21;
+
+// invocation of task with default arguments 
+read ( , 5); // equivalent to (0, 5, 1)
+read (2 , val); // equivalent to (2, 21, 1)
+read (2); // eror - k not defined
+
 ```
