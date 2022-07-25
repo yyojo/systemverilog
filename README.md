@@ -916,15 +916,38 @@ module top (•••);
   logic [7:0] a; // error - local a clashes with pac::a
   mode_t mode;
   •••
-  if (mode == stop) // error - unkown identifier (use pac::stop)
+  if (mode == stop); // error - unkown identifier (use pac::stop)
 ```
 
 However in CUS import: 
 
 ```sv
 import pac::a;
-module top (•••);
-  
+module top (•••);  
   logic [7:0] a; // local a takes precedence
   •••
+```
+
+### Wildcard import
+A wildcard import allows al identifiers declared within a package to be imported provided the identifier isnot otherwise defined in the importing scope. Wildcard import makes declaration candidate for import:
+
+* Local or explicity imported declarations can override wildcard imported declarations 
+* Package declarations still visible through resolved name
+* Local or explicity imported declarations take precedence over wildcard imports
+
+```sv
+package pac;
+  localparam int a = 10;
+  typedef enum {start , stop} mode_t;
+endpackage : pac
+
+module top (•••);
+  import pac::*; 
+  
+  logic [7:0] a; // local a overrides with pac::a
+  mode_t mode;
+  •••
+  if (mode == stop); // all package declerations visible
+  •••
+  $display ("%h", pac::a); // resolved name to access package declaration
 ```
