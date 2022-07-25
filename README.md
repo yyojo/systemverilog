@@ -1015,3 +1015,30 @@ module top (•••);
   logic [7:0] d = a1; // OK resolved
 endmodule
 ```
+
+### Importing Packages in the Module Header
+How import packages declarations that may be used in ANSI C module port lists ? **import** inside module is insufficient. There are several solutions:
+* Use resolved name - inefficient for multiple declarations
+* Move import to COS - but we're trying to avoid using this scope
+* Import package as part of the module header - imported before parameter and port lists and import clause must be terminated with a semicolon
+
+
+```sv
+package P1;
+  typedef enum {start,stop} mode_t;
+endpackage : P1
+
+// solution 1 
+module top (
+  input mode_t mode, // error - mode_t undefined
+  •••);
+  import P1::*; 
+  •••
+endmodule
+
+module top import P1::*;( // import in module header, must include semicolon
+  input mode_t mode, 
+  •••);
+  •••
+endmodule
+```
