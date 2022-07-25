@@ -1286,5 +1286,33 @@ task cpu_drive_bad (input logic [7:0] write_data,
   data_read = 0;
   
 endtask : cpu_drive_bad
+```
 
+## Solution 1 - Variable Access by Side-Effect 
+* This is a traditional solution to the argument passing issue 
+  * Task directly read/writes variables
+  * Only literals are passed as arguments 
+* Variables mush be of same scope as task declaration
+  * Task cannot be declared in a package
+  * Reuse of tack is limited 
+* It is used extensively for class methods
+
+```sv
+logic reg; 
+logic ack;
+logic [7:0] data;
+
+task cpu_drive_side (input logic [7:0] write_data);
+
+  #5 reg = 1; 
+  wait (ack ==1);
+  #20 data = write_data; // inputs read directly
+  wait (ack ==0);
+  #20 data = 8'hzz;
+  req = 0; // outputs driven directly
+  
+endtask : cpu_drive_side
+•••
+cpu_drive_side(8'hff); // only literals in call
+•••
 ```
