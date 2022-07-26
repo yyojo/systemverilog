@@ -1419,3 +1419,66 @@ module memory (input bit clk , ifa bus); // pass the interface as port bus
     assign bus.data = read ? mem[bus.addr] : 'z;
 endmodule
 ```
+
+### How to Access Interface Items Through the Interface Instance Identifier 
+For a module with an **interface** **instance** you access interface items using the port name as a prefix.
+
+```sv
+interface ifa; 
+  logic req, start, gnt, rdy;
+  logic [1:0] mode;
+  logic [7:0} addr;
+  wire [7:0] data;
+  •••
+endinterface : ifa
+```
+
+```sv
+module top;
+  logic clk;
+  
+  ifa bus(); // decalre interface instance bus
+  
+  memory mem (clk, bus);
+  cpucore cpu (clk, bus);
+  •••
+  always @ (bus.rdy) // Access interface signal using instance name
+    if (bus.mode == 0)
+      •••
+endmodule : top
+```
+
+### How to Define Interface Ports
+An interface can have its own ports: 
+* Connected like any module port
+* Used to share an external signal
+
+```sv
+interface ifa (input clk); // define clk port in interface declaration
+  logic req, start, gnt, rdy;
+  logic [1:0] mode;
+  logic [7:0} addr;
+  wire [7:0] data;
+  •••
+endinterface : ifa
+```
+
+```sv
+module memory (ifa bus);
+  •••
+endmodule
+
+module cpucore (ifa bus);
+  •••
+endmodule
+
+module top;
+  logic clk = 0;
+  
+  ifa bus(clk); // connect clk port of top module to interface port duting instantiation
+  
+  memory mem (bus);
+  cpucore cpu (bus);
+  •••
+endmodule : top
+```
