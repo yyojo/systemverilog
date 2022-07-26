@@ -1619,3 +1619,32 @@ module cpucore (ifa bus);
   •••
 endmodule
 ```
+
+### Accessing Interface Methods in Module
+* Same syntax and statements as in the module task definition 
+* Declare once - visible to any module connected to interface 
+* Call methods through interface port or instance
+
+```sv
+interface ifa (input clk);
+  logic req., start, gnt, rdy;
+  logic [1:0] mode;
+  logic [7:0] addr;
+  wire [7:0] data;
+  
+  task read (input byte raddar , output byte rdara);
+    @ (posedge clk);
+    addr = radder;
+    rdata = data
+    •••
+  endtask
+endinterface : ifa
+```
+
+```sv
+module cpucore (ifa bus);
+  •••
+  bus.read (addr,data);
+  •••
+endmodule
+```
