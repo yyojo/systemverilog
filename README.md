@@ -1482,3 +1482,29 @@ module top;
   •••
 endmodule : top
 ```
+
+### How to Define Interface Parameters
+You can parameterize interface just like a module 
+
+```sv
+// you can define them as port of interface header
+interface fastbus #(WIDTH1 = 16, WIDTH2 = 8) (input clk);
+  logic [WIDTH1-1:0] data;
+  logic [WIDTH2-1:0] address;
+  •••
+endinterface
+
+// you can define them inside interface with parameter type
+interface fastbus (input clk);
+  parameter WIDTH = 16;
+  logic [WIDTH-1:0] data;
+  •••
+endinterface
+
+module test;
+  fastbus #(8,5) bus8x5 (clk); // 8-bit data and 5-bit address
+  fastbus #(8) bus8x8 (clk); // you can override parameters duting interface instantiation
+  slowbus #(.WIDTH(8) bus8 (clk) // 8 bit data
+endmodule
+```
+
