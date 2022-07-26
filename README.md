@@ -1715,3 +1715,24 @@ initial begin
 <img width="1697" alt="Screen Shot 2022-07-26 at 11 03 03" src="https://user-images.githubusercontent.com/109002901/180955449-9b930f7d-e042-444b-a09b-be51cd53cdea.png">
 <img width="1688" alt="Screen Shot 2022-07-26 at 11 04 14" src="https://user-images.githubusercontent.com/109002901/180955679-49b60c33-e349-471a-83e0-80f16f77669a.png">
 
+### Immediate Assertions
+*  A procedural **assert** statement is similar to an **if** statement and ignored by synthesis
+*  When executed, assertion verifias a boolean expression - pass if expression evaluates to 1 and fail if expression evaluates to 0, Z ,X
+*  reports error message on failure - you can change this behavior
+*  You should label you assertions - label is used in the failure message and helps to manage assertions
+
+
+```sv
+module test;
+  •••
+  always @(negedge clk)
+    A1: assert ( ~(wr_en && rd_en) );
+  •••
+endmodule
+
+// Verilog equivalent 
+always @(negedge clk)
+    if (wr_en && rd_en)
+      $display ("error");
+  •••
+```
