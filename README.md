@@ -2107,3 +2107,61 @@ Pure random number sequences are useless for verification
 Verificiation uses pseudo-random sequences - controlled by seed(s): 
 * Using the same seed generates the same sequence
 * Using a different seed generates a different sequence
+
+### randomize() - Randomizing Scope Variables
+* The **radomize()** function generates random values on variables - it return 1 on success, variables can be randomized and constraints can be met. Otherwise return 0
+* You can randomize integral scalar and array variables
+* **randomize()** is defined in a built-in package called std - automatically imported and singular, integral and variable restrictions
+
+```sv
+typedef enum bit[2:0] {ADDI, SUBI, ANDI, XORI, JMP, JUMPC. CALL} op_t;
+typedef enum bit[1:] {REG0, REG1, REG2, REG3} regs_t;
+
+op_t opc;
+regs_t regs;
+logic[7:0] data;
+
+int ok;
+
+initial begin
+  repeat (7168) begin 
+    // function randomizes variable pass as arguments
+    ok = randomize(opc, regs, data); 
+    @(posedge clk);
+  end
+end
+```
+
+### Random Stability 
+Random stability is to localize the RGN (Random Number Generator) to threads and object. Because this makes the sequence of random values return by a thread or object independent of RNG in other threads or objects.
+* Each design element instance RNG has the same initial seed (default 1) - can be change on command line **-svseed = x**
+* Every instance and process has its own RNG
+* Each process RNG is seeded with the next value from parent RNG
+* Adding new proccesses after exitsting code maintains seed order and stability 
+
+### Setting the Random Seed 
+* You can manually seed a proccess RNG - can help with thread stability but very rare to use it 
+* Use **srandom()** methods of the built-in **proccess** class (a proccess is a class) - **proccess:: self.srandom(seed)**
+* Proccess object instances are automatically created
+
+```sv
+module randtest;
+•••
+
+// proccess 1
+always @ (posedge clk); 
+  begin : P1
+    proccess::self.srandom(10); // manually seed P1 RNG
+    ok = randomize(data1);
+    •••
+  end
+  
+
+// proccess 2
+always @ (sel, d1, d2); 
+  begin : P2
+    ok = randomize(data1);
+    proccess::self.srandom(20); // RNG of P2 reseeded during execution
+    •••
+  end
+```
