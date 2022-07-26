@@ -1831,3 +1831,30 @@ fork
 join_none
 d;
 ```
+
+### Proccess Control - disable fork, wait fork
+* **disable fork** terminates all active descendants of the current proccess - use after **join_any** to ensure only one forked block completes
+
+```sv
+fork 
+  fork 
+    a; b; c;
+  join_any 
+  disable fork;
+  d;
+join
+```
+* **wait fork** stops further execution until all forked blocks complete - affects all forks in currenct scope
+
+```sv
+fork
+  a; b; c; 
+join_any
+
+fork 
+  d;
+join_none
+e;
+wait fork;
+f;
+```
