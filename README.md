@@ -1529,10 +1529,10 @@ endinterface
 ```
 
 ### Seletcting the Interface Modport by Qualifying the Module Port Interface Type
+An interface modport can be selected unsing the module declaration port of interface type.
 * busmaster decalares interface port mbus - type is mod_if and modprt is master
 * busslave decalares interface port sbus - type is mod_if and modprt is slave
 * testbench instantiates interface and module as before
-
 
 ```sv
 interface mod_if'
@@ -1555,6 +1555,38 @@ module testbench;
   mod_if bus();
   busmaster M1 (.mbus(bus));
   busmaster S1 (.mbus(bus));
+  •••
+endmodule
+```
+
+### Selectiong the Interface Modport by Qualifiying the Module Port Interface Binding
+An interface modpot can be selected during the port mapping of module intantiation.
+* busmaster declares interface port mbus of the mod_if 
+* busslave decalred interface port sbus of type mod_if
+* testbench maps the mbus port of M1 to modport master of bus2
+* testbench maps the sbus port of S1 to modport slave of bus2
+
+```sv
+interface mod_if'
+  logic a, b, c, d;
+  modport master (input a, b, output c, d);
+  modport slave (input c, d, output a, b);
+endinterface
+```
+
+```sv
+module busmaster (mod_if.master mbus);
+  •••
+endmodule
+
+module busslave (mod_if.slave sbus);
+  •••
+endmodule
+
+module testbench;
+  mod_if bus2();
+  busmaster M1 (.mbus(bus2.master));
+  busmaster S1 (.mbus(bus2.slave));
   •••
 endmodule
 ```
