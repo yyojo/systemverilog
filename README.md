@@ -2165,3 +2165,27 @@ always @ (sel, d1, d2);
     •••
   end
 ```
+
+### Constraint Block 
+The **constraint_block** is a list of expression statements that restrict the range of a variable or define relations between variables.
+Use the **with** clause to attach a constraint block to the randomize method.
+
+
+```sv
+typedef enum bit[2:0] {ADDI, SUBI, ANDI, XORI, JMP, JUMPC. CALL} op_t;
+typedef enum bit[1:] {REG0, REG1, REG2, REG3} regs_t;
+
+op_t opc;
+regs_t regs;
+logic[7:0] data;
+
+int ok;
+
+initial begin
+  ok = randomize(data) with { data >= 32 ; data <= 126; }; // relational - data between 32 and 126
+  ok = randomize(opc) with { opc inside {[ADDI;ANDI] , JMP , JMPC}; }; // list - opc in range 
+                                                                       // ADDI to ANDI or JMP or JMPC
+  // distribution: REG0-REG1 twice as likely as REG2-REG3                                                                     
+  ok = randomize(regs) with { regs dist { [REG0:REG1] := 2 , [REG2:REG3] := 1 }; 
+end
+```
