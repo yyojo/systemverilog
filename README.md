@@ -1763,5 +1763,18 @@ module test;
   end 
   •••
 endmodule
+```
 
+### Severity Levels 
+Assertion failure can be graded with severity levels: **$info**, **$warning** , **$error** and default **$fatal** (terminates simulation)
+* Severity level is reported 
+* You can appent output information using syntax identical to that for $display
+* This is output in addition to the standard failure
+
+```sv
+  always @(negedge clk) begin
+    A1: assert (valid);
+      $display("%m : success");
+    else begin 
+      $warning("valid inactive");
 ```
