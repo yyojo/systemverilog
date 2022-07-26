@@ -1495,7 +1495,7 @@ interface fastbus #(WIDTH1 = 16, WIDTH2 = 8) (input clk);
 endinterface
 
 // you can define them inside interface with parameter type
-interface fastbus (input clk);
+interface slowbus (input clk);
   parameter WIDTH = 16;
   logic [WIDTH-1:0] data;
   •••
@@ -1508,3 +1508,24 @@ module test;
 endmodule
 ```
 
+### Modport
+To restrict interface access within a module, there are **modport** lists with direcetions declared within the interface. The keyword **modport** indicates that the directions are declared as if inside the module.
+
+Modports create different views of an interface 
+* Specifiy a subset of interface signals accessible to a module
+* Specify direction information for those signals
+
+You can specify a modport vire for a specific module in to ways:
+* In the module declaration
+* In the module instatiation
+
+```sv
+interface mod_if'
+  logic a, b, c, d;
+  modport master (input a, b, output c, d);
+  modport slave (input c, d, output a, b);
+  modport slave (input b, output a);
+endinterface
+
+
+```
