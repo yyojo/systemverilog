@@ -1713,3 +1713,5 @@ initial begin
 ### String Methods
 
 <img width="1697" alt="Screen Shot 2022-07-26 at 11 03 03" src="https://user-images.githubusercontent.com/109002901/180955449-9b930f7d-e042-444b-a09b-be51cd53cdea.png">
+<img width="1688" alt="Screen Shot 2022-07-26 at 11 04 14" src="https://user-images.githubusercontent.com/109002901/180955679-49b60c33-e349-471a-83e0-80f16f77669a.png">
+
