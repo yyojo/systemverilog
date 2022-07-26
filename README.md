@@ -1919,12 +1919,11 @@ initial begin
 * This reads input from the last sample point - input sample from clocking value may be different from current value 
 * Can synchronize to a change in input sample - @(cb.dout)
 
-
 ```sv
 bit [7:0] dreg, dout;
 clocking cb @(posedge clk);
   default input #1ns
-          output #3ns; // default skew for inputs and outputs
+          output #3ns; 
   
   input dout; 
   output data; 
@@ -1955,6 +1954,56 @@ clocking cb @(posedge clk);
   
   input dout; 
   output data; 
-  output #5sn enab; 
+  output #5ns enab; 
 endclocking
+```
+
+if we have: 
+```sv
+clocking cb @(posedge clk);
+  
+  output #3ns one; 
+  output negedge two; 
+endclocking 
+
+initial begin 
+  @(cb);
+  @(negedge clk);
+  #1ns
+  cb.one <= 1;
+  cb.two <= 1;
+```
+Its mean that **synchronization point** is right after positive edge -> negative edge -> 1ns delay , than wait until the next clk positive edge, then 1ns to update value. For signal two , it wait to the next negative edge to upsate value.
+
+### Multiple and Default Clocking Blocks 
+* You can define multiple clocking blocks in a scope - for multiple clocks , different signals or different timming 
+* One block in a scope can be defined as a default clocking block - add **default** to the beginning of the clocking block declaration, or use a default statement separate from the declaration
+* Default clocking blocks allow cycle delays
+
+```sv
+clocking cb1 @(posedge clk1);
+  default input #1step
+          output #3ns; 
+  input dout1; 
+  output data1; 
+endclocking
+
+clocking cb2 @(posedge clk2);
+  input #2 dout2; 
+  output #2 data2; 
+endclocking
+
+
+default clocking cb3 @(posedge clk2);
+  input #2 dout2; 
+  output #2 data2; 
+endclocking
+
+// equivalent to 
+clocking cb3 @(posedge clk2);
+  input #2 dout2; 
+  output #2 data2; 
+endclocking
+
+default clocking cb3
 ```
