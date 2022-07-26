@@ -1881,7 +1881,7 @@ clocking cb @(posedge clk);
   default input #1ns
           output #3ns; // default skew for inputs and outputs
   
-  input dout; //clocking block input
+  input dout; // clocking block input
   output data; // clocking block outputs
   output #5sn enab; // output with explicit skew
 
@@ -1900,13 +1900,41 @@ clocking cb @(posedge clk);
   default input #1ns
           output #3ns; // default skew for inputs and outputs
   
-  input dout; //clocking block input
-  output data; // clocking block outputs , delay of 3ns (default)
-  output #5sn enab; // output with explicit skew, delay of 5ns
-endclocking
+  input dout; 
+  output data; 
+  output #5sn enab; 
 
 initial begin
   @(cb); // sync to clocking event
     cb.data <= 1'b1;
     cb.enab <= 1'b1; // clocking block drives
   •••
+```
+
+### Clocking Block Input Samples
+* Clocking block automatically sampels input: 
+  * Input samples as specified skew before clocking event
+  * Input unpdated obseved region
+
+* For timing read input via clocking block - dreg <= db.out;
+* This reads input from the last sample point - input sample from clocking value may be different from current value 
+* Can synchronize to a change in input sample - @(cb.dout)
+
+
+```sv
+bit [7:0] dreg, dout;
+clocking cb @(posedge clk);
+  default input #1ns
+          output #3ns; // default skew for inputs and outputs
+  
+  input dout; 
+  output data; 
+  output #5sn enab; 
+endclocking
+
+initial begin
+  @(cb); 
+  // read last sample
+  dreg <= cb.dout;  
+  •••
+```
