@@ -1706,3 +1706,10 @@ initial begin
   repstr = {2{"go "}}; // "go go "
   repstr[2] = "t"; // "gotgo "
 ```
+### String Operators
+
+<img width="1744" alt="Screen Shot 2022-07-26 at 11 01 35" src="https://user-images.githubusercontent.com/109002901/180955171-a729a704-08dd-4976-9ccd-4ad2e764a4b2.png">
+
+### String Methods
+
+<img width="1697" alt="Screen Shot 2022-07-26 at 11 03 03" src="https://user-images.githubusercontent.com/109002901/180955449-9b930f7d-e042-444b-a09b-be51cd53cdea.png">
