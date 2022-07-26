@@ -2069,7 +2069,7 @@ in the following double byte format
 
 ```sv
 typedef enum bit[2:0] {ADDI, SUBI, ANDI, XORI, JMP, JUMPC. CALL} op_t;
-typedef enum bit[1:] {REG0, REG1, REG2, REG3} regs_t;
+typedef enum bit[1:0] {REG0, REG1, REG2, REG3} regs_t;
 
 op_t opc;
 regs_t regs;
@@ -2115,7 +2115,7 @@ Verificiation uses pseudo-random sequences - controlled by seed(s):
 
 ```sv
 typedef enum bit[2:0] {ADDI, SUBI, ANDI, XORI, JMP, JUMPC. CALL} op_t;
-typedef enum bit[1:] {REG0, REG1, REG2, REG3} regs_t;
+typedef enum bit[1:0] {REG0, REG1, REG2, REG3} regs_t;
 
 op_t opc;
 regs_t regs;
@@ -2173,7 +2173,7 @@ Use the **with** clause to attach a constraint block to the randomize method.
 
 ```sv
 typedef enum bit[2:0] {ADDI, SUBI, ANDI, XORI, JMP, JUMPC. CALL} op_t;
-typedef enum bit[1:] {REG0, REG1, REG2, REG3} regs_t;
+typedef enum bit[1:0] {REG0, REG1, REG2, REG3} regs_t;
 
 op_t opc;
 regs_t regs;
@@ -2188,4 +2188,30 @@ initial begin
   // distribution: REG0-REG1 twice as likely as REG2-REG3                                                                     
   ok = randomize(regs) with { regs dist { [REG0:REG1] := 2 , [REG2:REG3] := 1 }; 
 end
+```
+
+### Conditional Constraints 
+Conditional constraints allow you to select between different sets of constraints, depending on the value of another variable.
+There are two ways of defining condirional constraintds: 
+* Implication, using the **->** operator
+* **if-else**, using the **if-else** construct
+
+```sv
+typedef enum bit[1:0] {SMALL, MEDIUM, LARGE, XL} mode_t;
+
+mode_t mode;
+
+int ok;
+
+initial begin
+  // if mode is SMALL, data constraint is <100
+  ok = randomize(data) with {mode == SMALL -> data < 100;
+  // if mode is LARGE, data constraint is > 100
+                             mode == LARGE -> data > 100;};
+  // if mode is neither SMALL or LARGE data is unconstrained
+  
+  // same constraints with if-else
+   ok = randomize(data) with {if (mode == SMALL) data < 100;
+  // if mode is LARGE, data constraint is > 100
+                             else if (mode == LARGE) data > 100;};
 ```
