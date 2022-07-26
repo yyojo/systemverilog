@@ -2215,3 +2215,18 @@ initial begin
   // if mode is LARGE, data constraint is > 100
                              else if (mode == LARGE) data > 100;};
 ```
+
+### Random Weighted Case - randcase 
+You can use **randcase** to randomly select statement(s) for execution.
+* You can provide different probabilities (weights) for each branch
+* Weights may be constant or variable expressions - non negative integral expressions only
+
+```sv
+repeat (50) begin 
+  randcase
+    20 : gen_atm();
+    30 : gen_ethernet();
+    10 : gen_ipv4();
+    5 : gen_crc_errror(); // probability = 5/65 ~ 8%
+  endcase
+```
