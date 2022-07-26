@@ -2007,3 +2007,34 @@ endclocking
 
 default clocking cb3
 ```
+
+### Cycle Dely
+* You can insert cycle delays for the default clocking block
+  * ##N - positive number or identifier 
+  * ##(expr) - positive integer expression
+* Procedural delay always refers to the default clocking block - ##1 cb.data <= 1;
+* Synchronous drive delay always refers to target variable's clocking - cb.data <= ##2 var; , this is not intra-aassignment delay and illeagal for clocking block signals
+
+
+```sv
+default clocking cb1 @(posedge clk);
+  input #2 dout;
+  output #3 reset, data;
+endblocking
+
+clocking cb2 @(negedge clk);
+  output #3 enab, rdata;
+endclocking 
+
+initial begin 
+  repeat (2) begin
+    @(cb1);
+    //wait 2 cb1 cycles 
+    ##2; 
+    // drive data after 1 cb1 cycle 
+    ##1 cb1.data <= 2'b01;
+  end
+  // drive rdata with current dreg value after 3 cb2 cycles
+  cb2.rdata <= dreg;
+end   
+```
