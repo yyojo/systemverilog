@@ -1648,3 +1648,39 @@ module cpucore (ifa bus);
   •••
 endmodule
 ```
+
+### Declare a Module Port of a Generic Interface Type 
+You can use the **interface** keyword rather than a specific interface type in your module declaration's list of prts. This serves as a placeholder for an interface type and you can select the interface when instantiating the module.
+
+You can declare a module port of a generic interface type:
+* This defers actual interface slecetion until module instantiation
+* Must use Verilog 2001 ANSI-stye port declaration
+
+```sv
+interface ifa; 
+  logic req, start, gnt, rdy;
+  logic [1:0] mode;
+  •••
+endinterface : ifa
+```
+
+```sv
+module memory (interface bus); // use a generic interface port
+                               // in module defintition
+  •••
+endmodule
+
+module cpucore (interface bus); // use a generic interface port
+                               // in module defintition
+  •••
+endmodule
+
+module top;
+
+  ifa bus1();
+  memory mem (.bus(bus1)); // Map specific interface during instatiations
+  cpucore cpu (.bus(bus1));
+endmodule : top
+```
+
+
