@@ -1736,3 +1736,32 @@ always @(negedge clk)
       $display ("error");
   •••
 ```
+
+### Action Blocks
+Assertions can be execute statements when they pass or fail:
+* Called action blocks 
+* Can contain any SystemVerilog constructs
+* Has verification functionality only 
+* **else** block is executed on assertion failure - common to omit pass block
+* Assertion label can be accessed in the action block via the **%m** format specifier - included in the failure message
+
+```sv
+module test;
+  •••
+  always @(negedge clk) begin
+    A1: assert ( ~(wr_en && rd_en) );
+      $display("%m : success");
+    else begin 
+      $display ("read/write fail");
+      err_count++;
+    end 
+    
+    A2 assert (valid);
+      // pass block ommited
+    else  
+      $display ("valid inactive");  
+  end 
+  •••
+endmodule
+
+```
