@@ -1866,4 +1866,24 @@ the **clocking block** construct identifies clock signals and captures the timin
 
 * Driving or sampling DUT port on active clock edges can lead to race conditions
 * Clocking blocks are a verification construct to help avoid this
-  * Driving testbench outputs via a clocking blocks adds a delay (skew) to transiztors
+  * Driving testbench outputs via a clocking blocks adds a delay (skew) to transistors
+  * A clocking block can also sample testbench inputs with a set delay
+* Clocking blocks separate signal timing from signal function and allows stimulus to be written in terms of cycles and transactions only
+
+### Clocking Block Declaration
+* A clocking block can be declared in a module or interface 
+* Clocking block declaration defines the clock event , signal direction (does not declare signals , direction is from testbench perspective) and input and outpout delay (skew) - explicitly or by default
+* Outputs are driven skew units after the clock eveng
+* Inputs are samples skew units before the clocking event
+
+```sv
+clocking cb @(posedge clk);
+  default input #1ns
+          output #3ns; // default skew for inputs and outputs
+  
+  input dout; //clocking block input
+  output data; // clocking block outputs
+  output #5sn enab; // output with explicit skew
+
+endclocking
+```
