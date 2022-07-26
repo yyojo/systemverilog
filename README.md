@@ -1803,3 +1803,31 @@ Concurrent assertion describe behavior that spans over time - can span multiple 
 ```sv
 SPI1 : assert property (@(posedge clk) !ce ##1 ce |-> ce[*16] ##1 !ce);
 ```
+
+## fork-join Enhancements: join_any , join_none 
+Verilog **fork-join** completes when all spawned blocks complete - This blocks further execution until the **fork-join** completes.
+
+```sv
+fork
+  a;b;c;
+join
+d;
+```
+SystemVerilog adds two join variants to control when **fork-join** completes:
+* **join_any** completes the fork as soon as any of the blocks completses - other blocks left running
+
+```sv
+fork
+  a;b;c;
+join_any
+d;
+```
+
+* **join_none** completes the fork immediately - all blocks left running 
+
+```sv
+fork
+  a;b;c;
+join_none
+d;
+```
