@@ -1590,3 +1590,32 @@ module testbench;
   •••
 endmodule
 ```
+
+## Interface Methods
+A subroutine defined within and interface is called an **interface method**.
+* Writing/reaing interface signals can be handled by tasts - abstract interface communication 
+* However everymodule must contaion copies of the interface - maintainability issues
+* Solution is to declare tasks as part of the interface - accessible to any module connected to the interface 
+
+```sv
+interface ifa (input clk);
+  logic req., start, gnt, rdy;
+  logic [1:0] mode;
+  logic [7:0] addr;
+  wire [7:0] data;
+endinterface : ifa
+```
+
+```sv
+module cpucore (ifa bus);
+
+  task read (input address);
+    @ (posedge clk);
+    bus.addr = address;
+    •••
+  endtask
+  •••
+  read(8'hff);
+  •••
+endmodule
+```
