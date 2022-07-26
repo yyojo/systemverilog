@@ -2054,3 +2054,32 @@ clocking cb @(posedge clk);
   output data = top.dut.data // correct - hierarchical expression associated with signal 
 endclocking 
 ```
+
+## Random Stimulus 
+----
+#### CPU Coverage Test Care
+Declare opcode and register values as enumerated types. Assign values for driving into DUT. 
+**Problem** - How to test, combinations of opcode, register and data ? 
+* **Solution 1** - Using looped CPU instructions stimulus 
+* **Solution 2** - Applying SV randomization and constraints 
+
+This simplified 8-bit CPU has: 7 immediate instructions: ADDI, SUBI, ANDI, XORI, JMP, JMPC, CALL and 4 registers: REG0, REG1, REG2, REG3
+in the following double byte format
+<img width="1300" alt="Screen Shot 2022-07-26 at 17 22 10" src="https://user-images.githubusercontent.com/109002901/181029720-f14f406d-ea41-45b0-b3e6-7cf631b011b9.png">
+
+```sv
+typedef enum bit[2:0] {ADDI, SUBI, ANDI, XORI, JMP, JUMPC. CALL} op_t;
+typedef enum bit[1:] {REG0, REG1, REG2, REG3} regs_t;
+
+op_t opc;
+regs_t regs;
+logic[7:0] data;
+
+initial begin 
+  // generate stimulus
+  opc = ADD1;
+  regs = REG0;
+  data = 5;
+  // drive into DUT
+  •••
+```
