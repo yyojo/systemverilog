@@ -2096,3 +2096,14 @@ The human brain loves the patterns, however, bugs don't come in patterns. System
 * You can apply randomization with constraints to:
   * Local variables - "scope" randomization (this module)
   * Class properties - class-based randomization
+
+
+### Pseudo Random Number (PRN) Generators
+PRN Generators generate random sequences algorithmically which are controlled by initial values called as seeds
+Pure random number sequences are useless for verification
+* Sequence must be repeatable
+* Allows debug fix debug cycle
+
+Verificiation uses pseudo-random sequences - controlled by seed(s): 
+* Using the same seed generates the same sequence
+* Using a different seed generates a different sequence
