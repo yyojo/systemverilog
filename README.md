@@ -1772,9 +1772,34 @@ Assertion failure can be graded with severity levels: **$info**, **$warning** , 
 * This is output in addition to the standard failure
 
 ```sv
-  always @(negedge clk) begin
-    A1: assert (valid);
-      $display("%m : success");
-    else begin 
-      $warning("valid inactive");
+always @(negedge clk) begin
+  A1: assert (valid);
+    $display("%m : success");
+  else begin 
+    $warning("valid inactive");
+```
+
+### Immediate and Concurrent Assertions
+An immediate assertion is an instantaneous boolean check - single cycle. 
+
+```sv
+always begin : CHECK @ (posedge ce);
+  repeat (16) begin
+    @ (posedge clk or negedge ce);
+      SP : assert (ce) 
+      else begin 
+        $error ("short ce pulse");
+        disable CHECK;
+      end
+    end
+    @ (posedge clk or negedge ce);
+    LP :  assert (!ce)
+    else $error ("long ce pulse");
+end
+```
+
+Concurrent assertion describe behavior that spans over time - can span multiple cycles.
+
+```sv
+SPI1 : assert property (@(posedge clk) !ce ##1 ce |-> ce[*16] ##1 !ce);
 ```
