@@ -2015,7 +2015,6 @@ default clocking cb3
 * Procedural delay always refers to the default clocking block - ##1 cb.data <= 1;
 * Synchronous drive delay always refers to target variable's clocking - cb.data <= ##2 var; , this is not intra-aassignment delay and illeagal for clocking block signals
 
-
 ```sv
 default clocking cb1 @(posedge clk);
   input #2 dout;
@@ -2037,4 +2036,21 @@ initial begin
   // drive rdata with current dreg value after 3 cb2 cycles
   cb2.rdata <= dreg;
 end   
+```
+
+## Handling Heirarchial Expressions in Clocking Blocks 
+Clocking blocks can drive or sample via a hierarchical expression:
+* Out-Of-Module References (OOMRs)
+* Slices or concatenations of signals in current or other scopes
+
+**Problem** - A clocking block signal cannot be a hierarchical expression
+**Solution** - You must associate a clocking block signal with the hierarchical expression
+
+```sv
+clocking cb @(posedge clk);
+  default output #3;
+  // output top.dut.daya; - error - direct hierarchical expression is illegal
+  // data associated with hierarchical expression
+  output data = top.dut.data // correct - hierarchical expression associated with signal 
+endclocking 
 ```
