@@ -1814,7 +1814,7 @@ join
 d;
 ```
 SystemVerilog adds two join variants to control when **fork-join** completes:
-* **join_any** completes the fork as soon as any of the blocks completses - other blocks left running
+* **join_any** completes the fork as soon as any of the blocks completes - other blocks left running
 
 ```sv
 fork
@@ -1833,7 +1833,7 @@ d;
 ```
 
 ### Proccess Control - disable fork, wait fork
-* **disable fork** terminates all active descendants of the current proccess - use after **join_any** to ensure only one forked block completes
+* **disable fork** terminates all active descendants of the current proccess - use after **join_any** to ensure only one forked block completes. You can write **disable block_name** to terminates all active executions of block and functions or tasks that called from it, but does not terminate subproccess of the block (if there are **join-forks** in the block, they will not be terminated)
 
 ```sv
 fork 
