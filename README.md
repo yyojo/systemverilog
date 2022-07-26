@@ -1894,7 +1894,6 @@ This schedulas assignment with skew:
 * Wait for the clocking block event - use the current time if assigned at the same time as the event occurs, wait for specified skew delay and drive output
 * Can synchronize to clocking block event  - @(cb);
 
-
 ```sv
 clocking cb @(posedge clk);
   default input #1ns
@@ -1937,4 +1936,25 @@ initial begin
   // read last sample
   dreg <= cb.dout;  
   •••
+```
+
+### Input and Output Skews
+You can specify skew:
+* With a default value - separate default for inputs and for the outputs
+* Explicitly in the signal identifier - override the default 
+
+Skew can be: 
+* A constant expression, parameter or number - must be positive and uses timescale of current scope
+* An edge (posedge, negedge, edge)
+* A time literal (including #1step - remember 1step means one simulation precision unit before the clocking evet 
+
+```sv
+clocking cb @(posedge clk);
+  default input #1step
+          output #3ns; // default skew for inputs and outputs
+  
+  input dout; 
+  output data; 
+  output #5sn enab; 
+endclocking
 ```
