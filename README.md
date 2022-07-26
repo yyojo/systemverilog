@@ -1683,4 +1683,8 @@ module top;
 endmodule : top
 ```
 
-
+## Simple Verification Features
+----
+### Strings 
+* **string** is a new datatype - dynamic arrays of bytes that grows/shrinks automatically to hold contents with initial value **""** (empty string)
+* It is indexed as a normal array
