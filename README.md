@@ -1887,3 +1887,26 @@ clocking cb @(posedge clk);
 
 endclocking
 ```
+
+### Clocking Block Output Drive
+For timing drive output via the clocking block - (cb.enab <=1;) - must use a nonblocking assignment
+This schedulas assignment with skew:
+* Wait for the clocking block event - use the current time if assigned at the same time as the event occurs, wait for specified skew delay and drive output
+* Can synchronize to clocking block event  - @(cb);
+
+
+```sv
+clocking cb @(posedge clk);
+  default input #1ns
+          output #3ns; // default skew for inputs and outputs
+  
+  input dout; //clocking block input
+  output data; // clocking block outputs , delay of 3ns (default)
+  output #5sn enab; // output with explicit skew, delay of 5ns
+endclocking
+
+initial begin
+  @(cb); // sync to clocking event
+    cb.data <= 1'b1;
+    cb.enab <= 1'b1; // clocking block drives
+  •••
