@@ -1687,4 +1687,22 @@ endmodule : top
 ----
 ### Strings 
 * **string** is a new datatype - dynamic arrays of bytes that grows/shrinks automatically to hold contents with initial value **""** (empty string)
-* It is indexed as a normal array
+* It is indexed as a normal array - with 0 as the left most character
+* It can be concatenated, replicated or compared
+* It can be assigned a string literal 
+
+```sv
+string message = "test";
+
+initial begin  
+  if (pass)
+    message = {message, "passed"};
+  else
+    message = {message , "failed"};
+  $display ("%s" , message);
+  $display ("%c" , message); // "t"
+  
+  string repsrt;
+  repstr = {2{"go "}}; // "go go "
+  repstr[2] = "t"; // "gotgo "
+```
