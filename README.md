@@ -1524,8 +1524,37 @@ interface mod_if'
   logic a, b, c, d;
   modport master (input a, b, output c, d);
   modport slave (input c, d, output a, b);
-  modport slave (input b, output a);
+  modport subset (input b, output a);
 endinterface
+```
+
+### Seletcting the Interface Modport by Qualifying the Module Port Interface Type
+* busmaster decalares interface port mbus - type is mod_if and modprt is master
+* busslave decalares interface port sbus - type is mod_if and modprt is slave
+* testbench instantiates interface and module as before
 
 
+```sv
+interface mod_if'
+  logic a, b, c, d;
+  modport master (input a, b, output c, d);
+  modport slave (input c, d, output a, b);
+endinterface
+```
+
+```sv
+module busmaster (mod_if.master mbus);
+  •••
+endmodule
+
+module busslave (mod_if.slave sbus);
+  •••
+endmodule
+
+module testbench;
+  mod_if bus();
+  busmaster M1 (.mbus(bus));
+  busmaster S1 (.mbus(bus));
+  •••
+endmodule
 ```
