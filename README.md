@@ -2401,3 +2401,39 @@ endclass
 
 argcon c2 = new(3); // c2.number = 3
 ```
+
+### Current Object Handle this
+* Keyword **this** is a handle to the current class instance - you can use it to reference class identifiers re-declared within a local scope. It is meaningful for nonstatic members
+* Here , this.addr is used to access the class property addr - otherwise it is hidden by the function argument addr
+
+```sv
+class frame;
+  logic [4:0] addr;
+  logic [7:0] payload;
+  
+  function new (input int addter, dat);
+    this.addr = addr;
+    payload = dat;
+  endfunction
+endclass
+```
+
+### Static Class Properties
+The static class properties are class properties which are created using the keyword **static**. A static property is shared by all instance of a class.
+
+```sv
+class frame;
+  static int frmcount;
+  int tag;
+  logic [4:0] addr;
+  lgoic [7:0] payload;
+  logic parity;
+  
+  function new (input int add , dat);
+    addr = add;
+    payload = dat;
+    frmcount++;
+    tag = frmcount;
+  endfucntion
+endclass
+```
