@@ -3049,3 +3049,6 @@ Ordered solution;
   * Identifies variables used in constraints
 * In batch mode, simulation continues
   * GUI launches Constraints Debugger Window 
+
+## Interfaces in Verification 
+----
