@@ -2825,3 +2825,79 @@ initial begin
   b1 = p1;
   b1.iam(); // Parent 
 ```
+
+## Class-Based Random Stimulus
+---- 
+### Random Class Propertires
+Random class properties are integral dlass properties that defined/declared as radom using rand or randc
+* **rand** - random with uniform distribution
+* **randc** - random cyclic randomly iterates through all values without repetition : 
+  * When an iteration is complete, a new random iteration automatically starts 
+  * Implementation may limit size
+
+```sv
+class randclass;
+  rand bit [1:0] p1;
+  // p1 example - 01 11 00 01 11 01 10 11 - equal probability, close repetition
+  randc bit [1:0] p2;
+  // p2 example - 01 11 10 00 01 00 11 10 - each repetition cycles through all value
+  // without repetition
+endclass
+```
+
+### Randomizing Class Objects : randomize()
+Randomize the properties by calling the **randomize()** function.
+* Every class has a built-in randomize virtual method
+* You cannot re-declare this method
+
+```sv
+class randclass;
+  rand bit [1:0] p1; // random variable
+  randc bit [1:0] p2; // random cyclic variable
+endclass
+
+randclass myrand = new();
+int ok;
+initial begin 
+  // randomizes all random variables in a class instance 
+  ok - myrand.randomize(); 
+  if (!myrand.randomize())
+    $display ("myrand randomize failure");
+end
+```
+
+### pre_randomize() and post_randomize()
+**randomize()** automatically calls two "callback" functions:
+* **pre_randomize()** - before radnomization
+* **post_randomize()** - after successful randomization
+
+if defined, these methods are automatically called on randomization
+
+```sv
+function void pre_randomize();
+ •••
+endfunction
+
+function void post_randomize();
+ •••
+endfunction
+```
+
+```sv
+class randclass;
+  rand bit[1:0] p1;
+  randc bit [1:0] p2;
+  bit [1:0] parity;
+  
+  function void post_radomize(); // define post_randomize
+    parity = p1 ^ p2;
+  endfunction
+endclass
+
+randclass myrand = new();
+int ok;
+
+initial begin
+  ok = myrand.randomize(); // randomize automatically calls post_randomize
+```
+
