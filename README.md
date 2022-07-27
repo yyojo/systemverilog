@@ -2979,3 +2979,73 @@ constraint c1 { p1 dist { [101:200] := 200 ); // 101 to 200 each get a weight of
 constraint c1 { p1 dist {[26:30]:/ 1 ); // 26-30 each has a weight of 1/5
 ```  
 
+### Constraint Expressions - Iterative Constraints
+You can use a loop to apply separate constrainta to each array element 
+
+```sv
+class randclass;
+  rand logic [3:0] arr [7:0]; 
+  constraint c1 {foreach (arr[i] (i <= 4) -> arr[i] <= 1;} // iterative constraint
+  constraint c2 {foreach (arr[i] (i >= 4) -> arr[i] >= 1;} // iterative constraint
+```  
+
+### Controlling Costraint with constraint_mode()
+Every constraint block has an enable switch called **constraint_mode** - enabled by default (1) , if disabled (0), the constraint block will not be used.
+
+* Mode can be written with task **constraint_mode**
+```sv
+task constraint_mode (bit on_off);
+```
+
+* Mode can be read with function **constraint_mode**
+```sv
+function int constraint_mode ();
+```
+Only constraint block have **constraint_mode**
+
+### Randomization Procedure and Its Effects 
+**Problem** - Randomization procedure can lead to unexpected results. For example , here you expect mode to be one haft the time and this is not the case.
+
+**Solution** - Order of randomization can be defined:
+* Use solve...before (apllies to rand variables only)
+* Or use **randc** properties 
+
+Randomization proceeds as follows:
+1. All **randc** properties randomized simultaneously
+2. Then all **rand** properties randomized simultaneously
+3. Then constrains are checked
+4. Cycle iterates until a solution is found ot the random space is exhausted 
+5 
+
+```sv
+class randclass;
+  rand bit[2:0] vect;
+  rand bit mode;
+  constraint c1 {mode -> vect ==0;} // expectation: mode to be 0 one half the time
+                                    // mode is 0 one ninth of the time
+endclass
+// applying solve...before
+class randclass;
+  rand bit[2:0] vect;
+  rand bit mode;
+  constraint c1 {mode -> vect ==0;
+                 solve mode before vect;} 
+endclass
+```
+Unordered solution:
+* **vect** and **mode** randomized simultaneously 
+* Constraint applied
+* All solutions equaliy likely
+* Probability **mode** = 1 is 1/9
+
+Ordered solution;
+* **mode** randomized first 
+* **vect** randomized based on constraints
+* Probability **mode** = 1 id 1/9
+
+### Randomization Failure 
+* Warning on randomization failure
+  * Identifies confliction constraints 
+  * Identifies variables used in constraints
+* In batch mode, simulation continues
+  * GUI launches Constraints Debugger Window 
