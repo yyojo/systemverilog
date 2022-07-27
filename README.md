@@ -2963,5 +2963,19 @@ class not_inside;
   rand bit [7:0] p2;
   constraint c2 { !{p2 inside {1,3,5,7};}
 endclass
-
 ```
+
+### Constraint Expressions - Weighted Distributions 
+* You can change distribution by defining weights for value using **dist** (default weight is 1). 
+* There are two ways to assign weight: 
+  * ** := ** assigns weight to the item or every value in a range
+  
+```sv
+constraint c1 { p1 dist { [101:200] := 200 ); // 101 to 200 each get a weight of 200
+```
+  * **:/** assigns weight to the item or to a range as a whole 
+  
+```sv
+constraint c1 { p1 dist {[26:30]:/ 1 ); // 26-30 each has a weight of 1/5
+```  
+
