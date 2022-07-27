@@ -2267,5 +2267,52 @@ package myclasses;
     logic [7:0] payload;
     bit parity;
   endclass
+```
 
+### Class Object
+A class defines a data type. An object is an instance of that class. An object is used by first declating a variable of that class type (that holds an object handle) and then creating an object of that class (using the **new** function) and assigning it to the variable.
+
+The class type declartion declares class members:
+* Data itmes called properties or fields
+* Task or function which operate on data items called methods
+
+```sv
+class myclass;
+  int number; // class property
+  
+  task set (input int i); // class method
+    number = i;
+  endtask
+  
+  function int get(); // class method
+    return number;
+  endfunction
+  
+endclass
+
+myclass c; // declaring a variable of class my_class, c is called "handle"
+c = new; // creating an instance of myclass with new.
+         // now c is inferred as instance or object
+```
+
+### Variables of the Class Type
+* A variable of a class type is a called a handle - the uninitialized value is null
+* A class instance must be created for handle - using the **new** function. Assigns a pointer to an area of memory holding the class instance. A handle can be declared and created at the same tine 
+* Object presists until it either is no longer used or assigned **null**
+* There is automatic garbage collection
+
+
+```sv
+module top;
+  class myclass;
+    int number;
+  endclass
+  
+  myclass c; // handle
+  
+  initial begin 
+    c = new; // instance
+    •••
+  end
+  
 ```
