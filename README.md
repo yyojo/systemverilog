@@ -2286,8 +2286,7 @@ class myclass;
   
   function int get(); // class method
     return number;
-  endfunction
-  
+  endfunction  
 endclass
 
 myclass c; // declaring a variable of class my_class, c is called "handle"
@@ -2315,4 +2314,54 @@ module top;
     •••
   end
   
+```
+
+### Accessing Object Members by Using . Operator
+* Class members are accessed using ** . **
+* Class properties can be accessed directly or via class methods
+
+```sv
+class myclass;
+  int number; // class property
+  
+  task set (input int i); // class method
+    number = i;
+  endtask
+  
+  function int get(); // class method
+    return number;
+  endfunction  
+endclass
+
+myclass obj1 = new; 
+initial begin 
+  obj1.number = 4; // direct access 
+  
+myclass obj2 = new;
+initial begin 
+  obj2.set(3); // method access
+```
+
+### External Method Declaration
+Purely for convenience and readablitiy, you can declare the implementation of a class method outside of the class declaration using the **extern** keyword.
+
+* Define the methods outside the class declaration
+* Define the method prototype in the class prefixed by the keyword **extern** - first line in method, identifying type, name and arguments
+* Implement the method outside the class declaration, but in same scope - link to prototype using the scope resolution operator **::** , class_name::method_name
+
+
+```sv
+class myclass;
+  int number; // class property
+  
+  task set (input int i); // class method
+    number = i;
+  endtask
+  
+  extern function int get();
+endclass
+
+function int myclass()::get();
+  return number;
+endfunction
 ```
