@@ -2478,3 +2478,74 @@ initial begin
 end
 ```
 
+### Class Aggregation
+Aggregation refers to a class which collects a number of other classes into one object.
+* A class property can be instnce of another class
+  * Creates an aggregare or composite class
+  * Relationship "has a"
+  * Similar to module instantiation
+* Constructors of class properties must be explicitly called
+* Instance handles mush be chained to reach into hierarchy
+* Basically, use other class instance as a property of a class
+
+### Class Inheritance 
+Class inheritance is extending a class by defining a derived clas that inherits members (does not inherit constructors) of the base class and may override inherited members and/or add a new members.
+
+<ins>**Why inheritance?**</ins>
+
+* Reusability makes the user more productive 
+* Encourages use of proven software
+
+<ins>**Terminology**</ins>
+
+* Original class is called superclass (OO) or base clase (SV) 
+* New class is called the subclass (OO/SV) or derived class
+* SV provides only single inheritance - that is each subclass is derived from a single base class
+
+
+```sv
+class Base
+  ••• // base functions
+  ••• // base data
+endclass
+```
+
+```sv
+class Derived extends Base // include the base function and data
+  ••• // more functions
+  ••• // more data
+endclass
+```
+If superclass constructor takes arguments, the derived class constructor has to take these arguments
+
+```sv
+class frame;
+  static int frmcount;
+  int tag;
+  logic [4:0] addr;
+  lgoic [7:0] payload;
+  logic parity;
+  
+  function new (input int add , dat);
+    addr = add;
+    payload = dat;
+  endfucntion
+endclass
+
+class badframe extends frame;
+  function new();
+    super.new(); // automatically inserted
+    frm.count++;
+    tag = frmcount;
+  endfunction
+endclass
+
+class goodframe extends frame;
+  function new(input int add,dat);
+    super.new(add,dat); // automatically inserted
+    frm.count++;
+    tag = frmcount;
+  endfunction
+endclass
+```
+
