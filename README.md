@@ -3052,3 +3052,123 @@ Ordered solution;
 
 ## Interfaces in Verification 
 ----
+### Class-Based Testbench 
+It is a way of creating testbench that are more efficient, easy to write and enables the user to verify design with high-abstruction level modeling. 
+
+Why use class-based testbenches ?
+* Easier to maintain, reuse, etc.
+* Inheritance allows instance-specific customization of data and functionality - without affecting original code
+* Separation of stimulus and enviroment - Allows test writers to drive enviroment with minimal knowledge of protocols, heirarachy, etc.
+
+<img width="544" alt="Screen Shot 2022-07-27 at 16 58 40" src="https://user-images.githubusercontent.com/109002901/181265886-3ad9fc0a-4609-4d7c-9adb-adaffa250d45.png">
+
+### Separation of Stimulus and Enviroment
+Testbench interaction with a bus is in two layers:
+* Sequence - defines progression of high-level stimulus (transactions)
+* Verification Component (VC) - translate bewteen transactions and signal transitions
+
+### Class Connections to DUT Ports 
+**Problem** - class-based VCs drive DUT signals via interfaces. However, VCs should not be directly connected to an inteerface instance.
+* Breaks reusability - if mycv is hardwired to bus1, cannot drive bus2
+* Interface instances are static - myvc has to be declared local to the bus1 instance 
+
+**Solution** - what we need is an inerface variable:
+* Used ing class to access interface signals (via virtual interface)
+* Assigned to a specific interface instance when class is instantiated
+
+```sv
+interface myif (input clk);
+  logic [7:0] data;
+  •••
+endinterface 
+```
+
+```sv
+module test;
+  logic clk;
+  myif bus1 (clk), bus2 (clk);
+  comp DUT1 (bus1); // interface instance
+  comp DUT2 (bus2); // interface instance
+  
+  class myvc;
+    
+    task write_data (input int datin);
+      @ (negedge bus1.clk);
+        bus1.data = datin; // hardwired to bus1
+        •••
+     end task
+   endclass : myvc // class must be declared local to bus1
+   
+   myvc c1;
+   
+   initial begin
+     c1 = new();
+     c1.write_data(5); // any instance of myvc can only drive to bus 1
+                       // breaks usability
+   end
+   
+endmodule
+```
+
+### Virtual Interface
+The solution is to use virtual interface. 
+* An interface variable that can be connected to an interface instance
+* Can be referenced inside classes 
+* Allows access to interface signals using variable name as prefix
+* Needs to be assigned to an actual interface
+
+A virtual interface:
+* Can be declared as a class property 
+* Defualt value is **null** - must be assigned to an interface instance
+* **interface** keyword in the declaration is optional - include for readability 
+
+```sv
+interface myif (input clk);
+  logic [7:0] data;
+  •••
+endinterface 
+```
+
+```sv
+class myvc;
+  virtual interface myif vif; // property
+  •••
+  task write_data (input int datin);
+      @ (posedge vif.clk);
+        vif.data = datin; // accessed in method
+        •••
+     end task
+```
+
+### Virtual Interface Limitation 
+**Problem** - nets and variabelscan be read via a virtual interface. But a virtual interfaces cannot write to nets: 
+* As procedural assignment to a net (**wire**) is illegal
+* Bidirectional connections must be declared as **wire**
+
+**Solution 1** - Dual Representatiton 
+**Solution 2** - Utilize a clocking block 
+
+**Solution 1** is to define two representations for and instance bidirectional connection 
+* **wire** (hdata_w) for mapping to DUT **inout** port and for reading via virtual interfaces
+* **logic** (data) for writing from virtual interface
+* An **assign** statement is needed to drive **logic** writes onto **wire**
+
+<img width="657" alt="Screen Shot 2022-07-27 at 17 43 23" src="https://user-images.githubusercontent.com/109002901/181276805-f01d924a-5a26-4605-b1a2-314b5fe9c037.png">
+```sv
+interface hbus_if (input clk);
+  wire [7:0] hdata_w;
+  logic [7:0] hdata;
+  assign hdata_w = hdata;
+endinterface
+```
+
+```sv
+virtual interface hbus_if vif;
+
+initial begin 
+  @ (posedge vif.clk);
+  // vif.hdata_w <= 8'hff; // procedural assignment to wire illegal
+    vif.hdata <= 8'hff; // logic used as intermediary
+    dreg <= vif.hdata_w; // read from wire - ok 
+```
+
