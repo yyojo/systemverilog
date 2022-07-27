@@ -2247,3 +2247,25 @@ Data encapsulation means that each object hides its data from external access
 * Objects interact by "sending messages"
 * A message can request the reciving object to change a data value or replay with a data value
 
+### Class
+A class is a type that includes data and subroutines (functions and tasks) that operate on those data.
+* A class is a user-defined data type - declared in a module package interface or other design element
+* Classes define data and subroutines (tasks/functions) that operate on the data
+* Class objects can be dynamically created and deleted during simulation
+* Used in OOP for testbenches and simulations models
+
+```sv
+module top;
+  // class declaration in a module
+  class myclass;
+    int number
+  endclass
+
+package myclasses;
+  // class declaration in a package
+  class frame;
+    logic [7:0] payload;
+    bit parity;
+  endclass
+
+```
