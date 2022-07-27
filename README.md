@@ -2604,3 +2604,36 @@ initial begin
   f1.iam(); // frame , only parent method visable - error
   f1.tag = 5; sub-class property not visible 
 ```
+
+### Copy a Parent Instance to a Sub-Class Handle
+It is never legal to directly assign a parent handle to a handle of one of its sub-classes. It is only legal to assign a parent handle to a sub-class handle, if the parent handle contains an instance of the given sub-class.
+* A parent-class instance cannot be copied to a sub-class handle - unless the parent class handle conatins a subclass instance 
+* Requires use of **$cast:** - checks that the parent handle conatins a sub-class instance 
+
+```sv
+class frame;
+  function void iam();
+    $display("frame");
+  endfunction
+endclass
+
+class tagframe extends frame;
+  int tag;
+  
+  function void iam();
+    $display ("tagframe");
+  endfunction
+endclass
+```
+
+```sv
+frame f1;
+tagfreame t1 = new(); 
+tagframe t2;
+
+initial begin 
+  f1 = t1; // copy subclass instance to superclass handle
+  f1.iam(); // frame , only parent method visable 
+  $cast(t2,f1); // copy from f1 to t2 m checking with $cast
+  t2.iam(); // sub-class (tagframe) method now visiable
+```
