@@ -10,7 +10,7 @@ Delay control is achieved by specifying the waiting time to execution when the s
 We can specify the delay based timing control in three ways:
 
 * Regular delay control - It will be specified on the procedural assignment left as a non-zero number.
-* Intra - assignment delay control -  In this case, delays will be specified on the assignment operator's right-hand side. The right-hand side expression will be evaluated at the current time, and the assignment will occur only after the delay.
+* Intra-assignment delay control -  In this case, delays will be specified on the assignment operator's right-hand side. The right-hand side expression will be evaluated at the current time, and the assignment will occur only after the delay.
 * Zero delay control -  Zero delay control statement specifies zero delay value to the left-hand side of a procedural assignment. This method is used to ensure the statement is executed at the end of the simulation time. It means, zero delay control statement is executed after all other statements in that simulation time are executed.
 
 ### Event Control
@@ -2437,3 +2437,44 @@ class frame;
   endfucntion
 endclass
 ```
+
+### Static Class Methods
+When methods are declared as static, they are subject to all the class scoping and access rules but behave like a regular subroutine that can be called outside the class, even with no class instantiation. 
+Only static properties or other static methods can be access. Can be called even if no class instantiations exits
+* From class name using resolution operator **::**
+* From any class handle
+
+```sv
+class frame;
+  static int frmcount;
+  int tag;
+  logic [4:0] addr;
+  lgoic [7:0] payload;
+  logic parity;
+  
+  function new (input int add , dat);
+    addr = add;
+    payload = dat;
+    frmcount++;
+    tag = frmcount;
+  endfucntion
+  
+  static function int getcount();
+  return (frmcount);
+  endfunction 
+endclass
+```
+
+```sv
+frame f1,f2; // handles
+int frames;
+initial begin
+  frames = frame::getcount(); // 0
+  frames = f1.getcount(); // 0 
+  
+  f1 = new (1,2);
+  f2 = new (3,4);
+  frames = f2.getcount(); // 2 
+end
+```
+
