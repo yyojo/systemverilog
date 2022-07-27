@@ -2567,3 +2567,7 @@ The SystemVerilog parameter mechanism is used to parameterize a class. It allows
 * Parameters can be types as well as values - a type parameter creates a "class template"
 * Parameter values can ve overriden for individual instances - methods using type parameters must work for all expected type overrides
 * Each new parameter value effectively creates a new class declaration or class specialization - each class specialization has a separate set of static properties
+
+## Polymorphism and Virtuality 
+----
+### Polymorphism
