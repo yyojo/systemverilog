@@ -2365,3 +2365,39 @@ function int myclass()::get();
   return number;
 endfunction
 ```
+
+### Constructor Method
+The **new** function which is used to create a class instance and to initialize and instance is called the class constructor.
+Method **new** is a special class method called a constructor: 
+* Defined by default for al classrs
+* You can explicitly define it
+* Just like any other class function except new has no return type
+
+```sv
+// default constructor
+class defcon;
+  int number;
+endclass
+
+// explicit constructor
+class expcon;
+  int number;
+  
+  function new();
+    number = 5;
+  endfunction
+end class
+
+expcon c1 = new; // c1.number = 5
+
+// explicit contructor with arguments
+class argcon;
+  int number;
+  
+  function new (input int a)
+    number = a;
+  endfunction
+endclass
+
+argcon c2 = new(3); // c2.number = 3
+```
