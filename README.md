@@ -2548,4 +2548,7 @@ class goodframe extends frame;
   endfunction
 endclass
 ```
+<img width="1849" alt="Screen Shot 2022-07-27 at 11 40 05" src="https://user-images.githubusercontent.com/109002901/181202518-3101d3b8-47e7-4d08-8ab0-843eef94e170.png">
 
+### Multi-Layer Inheriance 
+You can inheriance to multiple generations. Each new level inherits the members of the pervious levels and can override any of these members and can add new members. Notice that **super.super.new()** is not allowed , only **super.new()**
