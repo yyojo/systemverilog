@@ -2230,3 +2230,20 @@ repeat (50) begin
     5 : gen_crc_errror(); // probability = 5/65 ~ 8%
   endcase
 ```
+
+## Basic Classes
+----
+**Object Oriented Programming** is a programming paradigm that focuses on objects (as apposed to proccess).
+Data oriented rather than procedure-oriented
+* Focuses on object instead of actions
+* Defines classes to characterize the objects 
+* Classes decalre and own:
+  * properties (attributes) - class member data mostly is private - hidden from "outside" code
+  * behaviors (methods) - class member functions often are public - callable by outside code 
+
+### Data Encapsulation in OOP
+Data encapsulation means that each object hides its data from external access
+* An object typically prohibits direct external access to its data
+* Objects interact by "sending messages"
+* A message can request the reciving object to change a data value or replay with a data value
+
