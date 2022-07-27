@@ -2552,3 +2552,10 @@ endclass
 
 ### Multi-Layer Inheriance 
 You can inheriance to multiple generations. Each new level inherits the members of the pervious levels and can override any of these members and can add new members. Notice that **super.super.new()** is not allowed , only **super.new()**
+
+### Data Hiding and Encapsulation 
+To restrict the access to class properties and methods from outside the class by hiding their names, SystemVerilog provides **local** and **protected** identifiers.
+
+By default, class members are visible externally and in all sub-classes. Two keywords hide members: 
+* **local** - Only visible inside the class
+* **protected** - Visible inside the class and any sub-classes (can be inherited)
