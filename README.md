@@ -2571,3 +2571,36 @@ The SystemVerilog parameter mechanism is used to parameterize a class. It allows
 ## Polymorphism and Virtuality 
 ----
 ### Polymorphism
+Polymorphism allows the use of a variable of the superclass type to hold subclass objects and to reference the methods of those subclasses directly from the superclass variable. 
+* An inherited class creates a new type - you need to easily change between sub-class types
+* A class handle of a given type can be assigned any class extension instance - polymorphism, this introduces the conceopt of handle type, class type is used in delcaration
+* It aims to look at the contents of the handle - class instance held in the handle.
+
+### Copy a Sub-Class Instance to a Parent Handle 
+A sub-class instance can always be directly copied to a parent class handle. However, by default, only parent class members are accessible from the handle - even thought it conttains a sub-class instance.
+
+```sv
+class frame;
+  function void iam();
+    $display("frame");
+  endfunction
+endclass
+
+class tagframe extends frame;
+  int tag;
+  
+  function void iam();
+    $display ("tagframe");
+  endfunction
+endclass
+```
+
+```sv
+frame f1;
+tagfreame t1 = new(); // create an instance of sub-class
+
+initial begin 
+  f1 = t1; // copy subclass instance to superclass handle
+  f1.iam(); // frame , only parent method visable - error
+  f1.tag = 5; sub-class property not visible 
+```
