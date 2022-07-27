@@ -2901,3 +2901,67 @@ initial begin
   ok = myrand.randomize(); // randomize automatically calls post_randomize
 ```
 
+### Controlling Randomization rand_mode()
+Every random property has an enable switch called **rand_mode**
+* Enabled by default (1)
+* If disables (0) the property will not be randomized
+
+Mode can be wrriten with task **rand_mode** - **task rand_mode(bit on_off)**
+* Called off a random property, the task changes the mode of that property
+* Called off an instance, the task changes the mode for all random properties of the instance 
+
+Mode can be read with **function int rand_mode()**
+Only random properties have rand_mode - calling method off a non-random property is a compile error
+
+### Constraint Blocks
+* Constraint can be embedded in classes using constraint blocks
+* A block can contain any any number of any form of constraints - relational, list or distribution or conditional 
+
+```sv
+class randclass;
+  rand bit [1:0] p1;
+  rand bit [1:0] p2;
+  
+  constraint c1 { p1 != 2'b00;} // constraints p1 to the values 01 10 11 
+  constraint c2 { p2 >= 64 , p2 <= 192; } // ; after each constraint expression
+                                          // but not after constraint block
+endclass
+
+randclass myrand = new();
+
+int ok;
+initial begin
+  // randomize p1 using constraint block c1 and p2 using constraint block c2
+  ok = myrand.randomize();
+  •••
+end
+```
+
+### Constraint Inheritance 
+Constraint are class members and are inherited just like other members.
+
+### Constraint Expressions - Set Membership
+The **inside** operator is particularly useful in constraint expressions. The operator can also be negated to generate a value outsine the set.
+
+```sv
+class randclass;
+  rand bit [7:0] p1;
+  constraint c1 {p1 inside {3,7,[11:20]};}
+endclass
+
+randclass myrand new();
+
+int ok;
+initial begin
+  ok = myrand.randomize();
+  •••
+end
+```
+
+```sv
+class not_inside;
+  rand bit [7:0] p2;
+  constraint c2 { !{p2 inside {1,3,5,7};}
+endclass
+
+```
