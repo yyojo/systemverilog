@@ -2608,7 +2608,7 @@ initial begin
 ### Copy a Parent Instance to a Sub-Class Handle
 It is never legal to directly assign a parent handle to a handle of one of its sub-classes. It is only legal to assign a parent handle to a sub-class handle, if the parent handle contains an instance of the given sub-class.
 * A parent-class instance cannot be copied to a sub-class handle - unless the parent class handle conatins a subclass instance 
-* Requires use of **$cast:** - checks that the parent handle conatins a sub-class instance 
+* Requires use of **$cast** - checks that the parent handle conatins a sub-class instance 
 
 ```sv
 class frame;
@@ -2636,4 +2636,192 @@ initial begin
   f1.iam(); // frame , only parent method visable 
   $cast(t2,f1); // copy from f1 to t2 m checking with $cast
   t2.iam(); // sub-class (tagframe) method now visiable
+```
+
+### Using $cast
+Casting lets sub-class instances use resources defined for parent classes.
+**$cast** is actually a subroutine - defined as both function and task 
+* Syntax - **$cast(destination , source)** , if the source does not contain a matching instance for the destination - task gives a runtime error , function returns 0
+
+### Advantages of Polymorphism 
+Polymorphism Usage: 
+* A base claass is used for handle array declaration
+* Diffenect sub-class instances are then assigned to array elements 
+* We can dynamically selet with sub-class instance to load into array.
+
+Advantages:
+* The type of frame is decided at the start of stimulus code
+* All subsequent references can be maes to the base array variable
+* More sub-classes can be easily added to the design
+
+```sv
+frame framearr[7:0];
+tagframe tf;
+errframe ef;
+
+initial begin 
+  foreach (framearr [i])
+    randcase 
+      2: begin 
+         tf = new (0,0);
+         framearr[i] = tf;
+         end
+      1: begin 
+      ef = new (0,0);
+      framearr[i] = ef; 
+      end
+   endcase
+```
+
+### Class Member Access in Polymorphism 
+**Problem** - By default, resolution of class member access is always according to the type of handle, not its contents
+**Solution** - Using virtual methods
+
+* Class members are resolved by searching from the class handle type 
+  * Through the inheritance hierarchy
+  * Even if the handle contains a subclass instance 
+* This blocks access to sub-class members for a sub-class instance in a parent class handle
+
+```sv
+class base; 
+  function void iam();
+    $display("Base");
+  endfunction 
+endclass
+
+class parent extends base; 
+  function void iam();
+    $display("Parent");
+  endfunction 
+endclass
+
+class child extends base; 
+  function void iam();
+    $display("Child");
+  endfunction 
+endclass
+```
+
+```sv
+base b1; 
+parent p1 = new();
+child c1 = new();
+
+initial begin
+  b1 = p1;
+  b1.iam(); // Base
+  
+  p1 = c1;
+  p1.iam() // Parent
+```
+
+### Using Virtual Methods 
+* Virtual methods direct methods resolution to the contents of a handle
+* They allow access to methods of a sub-class instance when held in a parent class handle 
+* When a method is declared as **virtual** it is automatically **virtual** in every sub-class
+
+```sv
+class base; 
+  virtual function void iam();
+    $display("Base");
+  endfunction 
+endclass
+
+class parent extends base; 
+  virtual function void iam(); // virtual keyword is optional
+    $display("Parent");
+  endfunction 
+endclass
+
+class child extends base; 
+  virtual function void iam(); // virtual keyword is optional
+    $display("Child");
+  endfunction 
+endclass
+```
+
+```sv
+base b1; 
+parent p1 = new();
+child c1 = new();
+
+initial begin
+  b1 = p1;
+  b1.iam(); // Parent 
+  
+  p1 = c1;
+  p1.iam() // Child
+```
+
+### Resolve Class Method Access 
+With polymorphism, when a methods is accessed off a class handle, how do you identify which class method is used ? 
+1. Examine the class declaration of the handle type 
+2. If the method is not virtual, then the call is directed to the handle class 
+3. If the methods is virtual, then examine the contents of the handle 
+4. If the handle contains a sub-class instance, the call is directed to the subclass
+5. If the handle does not contain a sub-class instance, the call is directed back to the handle class
+
+```sv
+class base; 
+  function void nvirt();
+    •••
+  endfunction
+
+  virtual function void virt();
+    •••
+  endfunction
+endclass
+
+class parent extends base; 
+  virtual functionvoid virt();
+    •••
+  endfunction
+endclass
+```
+
+```sv
+base b1; 
+parent p1 = new();
+
+initial begin 
+  b1 = p1; 
+  b1.nvirt(); // base 
+  b1.virt() // parent 
+```
+
+### Abstract Classes and Pure Virtual Methods
+A virtual class exists only to be inherited - it cannot be instantiated
+* Also known as an "abstract" class
+
+A virtual class (only) may have pure virtual methods: 
+* Prototype only - no implementation
+* Sub-class must provide implemetation
+
+```sv
+virtual class base; 
+  pure virtual function void iam();
+    $display("Base");
+  endfunction 
+endclass
+
+class parent extends base; 
+  virtual function void iam(); // virtual keyword is optional
+    $display("Parent");
+  endfunction 
+endclass
+
+class child extends base; 
+  virtual function void iam(); // virtual keyword is optional
+    $display("Child");
+  endfunction 
+endclass
+```
+
+```sv
+base b1 = new(); // instance illeagal
+parent p1 = new();
+
+initial begin
+  b1 = p1;
+  b1.iam(); // Parent 
 ```
