@@ -3171,4 +3171,36 @@ initial begin
     vif.hdata <= 8'hff; // logic used as intermediary
     dreg <= vif.hdata_w; // read from wire - ok 
 ```
+### Utilizing a Clocking block
+* Adding a clocking block to an interface allows better timing control
+* You can access signals via the clocking block with a virtual interface - procedural assignment to net via a clocking block is allowed
+* Clocking block defines signal direction from testbench perspective
+* You can reuse this direction information in the interface modport
+  * Use the **clocking** keyword in modport 
+  * It can be mixed with the other direction or **import** information
 
+```sv
+interface hbus_if (input clk);
+  wire [7:0] hdata_w;
+  
+  clocking cb1 @ (posedge clk);
+    default input #1 output #3;
+    input hdata_w;
+    output hdata_2;
+  endclocking 
+  
+  modport tb (clocking cb1, •••);
+  
+endinterface : hbus_if
+```
+
+```sv
+virtual interface hbus_if vif;
+
+initial begin 
+  @ (posedge vif.clk);
+    vif.cb1.hdata_w <= 8'hff; // procedural assignment to cb wire
+    dreg <= vif.cb1.hdata_w;
+  •••
+end
+```
