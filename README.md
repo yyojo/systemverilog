@@ -2559,3 +2559,11 @@ To restrict the access to class properties and methods from outside the class by
 By default, class members are visible externally and in all sub-classes. Two keywords hide members: 
 * **local** - Only visible inside the class
 * **protected** - Visible inside the class and any sub-classes (can be inherited)
+
+### What Are Parameterized Classes 
+The SystemVerilog parameter mechanism is used to parameterize a class. It allows user to define a generic class whose objects can be instantiated to have different array sizes or data types.
+
+* Classes can have parameters just like modules and interfaces
+* Parameters can be types as well as values - a type parameter creates a "class template"
+* Parameter values can ve overriden for individual instances - methods using type parameters must work for all expected type overrides
+* Each new parameter value effectively creates a new class declaration or class specialization - each class specialization has a separate set of static properties
