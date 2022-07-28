@@ -3328,5 +3328,125 @@ c1 : coverprint var1 {
 /* { [0:5] , 10} - values 0-5 and 10  
 { [0:5] , [9:14} - values 0-5 and 9-14
 */
+```
 
+### Explicit Scalar and Vector Bins 
+You can define scalar or vector bins:
+* Scalar bin 
+  * A single bin
+  * Incremented for all values in value range list 
+* Vector bin
+  * A unique bin for each value in the range list 
+  * Incremented when variables takes the corresponding value
+* You can mix scalar and vector bins for the same coverpoints
+
+```sv
+c1 : coverprint var1 {
+  bins V = {1,2,5}; } // created a single bin cs.V
+} 
+  
+cv : cover point var 1 {
+  bins V[] = {1 ,2 ,5} ; [] for 3 values created 3 bins
+  // cv.V[1] , cv.V[2] and cv.V[5]
+}
+```
+
+Each coverpoint can define:
+* Bin(s) for values that are illegal even if they appear in other bins 
+* Bin(s) for values to be ignored even if they appear in other bins
+* A single bin for all the values in range list
+* An uncostrained array giving a perarate bin for each unique value in a range list
+* A fixed number of bins for all values in a range list - duplicates retained and ignored and illegal values removed after distribution 
+* A default bin for all remaining values
+
+```sv
+logic [3:0] var 1 {
+
+ce : coverpoint var1 { 
+  // 1 bin for illegal values {0,15}
+  illegal_bins a = {0,15};
+  // 1 bin for ignored values {13,14} 
+  // (value 15 is illegal)
+  ignore_bins  b = { [13:15]};
+  // 1 bin for {2,3}
+  bins c = {2 ,3}
+  // 3 bins for d[1], d[2] , d[3]
+  bins d [ = { [0:2] , 2, 6] }; // bin for each unique value
+  // 2 bins - e[0] = 
+  bins e[2] = { [9:11] . 9, [12:15] };
+  // 1 bin for {4,5,7,8}
+  bins f = default;
+```
+
+### Cover Cross
+A cover cross is a user-defined item in a coverage model specifying a cross-product of cover points to cover and any optionally a condition guarding is sampling.
+
+You can track cross-products of:
+* Coverpoints within the covergroup
+* Other scope variables:
+  * Creates implicit coverpoint 
+  * Participates in cover cross
+  * No separate coverage for variables
+
+Use the **cross** keyword and provide:
+* A cross name (optional) 
+* List of coverpoints and/or variables 
+
+Bins are created for every cross-combination
+
+```sv
+typedef enum bit[2:0] {ADDI, SUBI, ANDI, XORI, JMP, JUMPC. CALL} op_t;
+typedef enum bit[1:0] {REG0, REG1, REG2, REG3} regs_t;
+
+op_t opc;
+regs_t regs;
+
+covergroup cg @(posedge clk);
+  c1 : coverpoint opc;
+  c2 : coverpoint regs;
+  opcxregs = cross c1,c2;
+endgroup
+```
+
+### Automatically Created Cover Cross Bins 
+A coverage bin is a tool defined or user-defined counter associated with a cover point value set, a cover point value transition set, or a cover cross tuple set. For cross-products the tool automatically creates a unique bin for each tuple.
+
+
+```sv
+logic [1:0] a;
+logic [3:0] b;
+logic c;
+
+coverage cg @(poseedge clk);
+  bcp : coverpoint b {
+    bins b1 = { [9:12] }; // one bin b1
+    bins b2[] = { [13:15] }; // 3 bins b2[13] , b2[14] b2[15]
+    bins restofb[] = default; // not in cross 
+    }
+ cpp : coverpoint c;
+ // implicit coverpoint for a 
+ axbxc : cross a , bcp , ccp; // 32 bins = a(4)* bcp(4)$cpp(2)
+```
+
+### Defininf a Cover Cross Bin (Explicit Cross bin and Select Expressions)
+You can explicit cross coverage bins:
+* **binsof** - selects specific bins from a coverpoint
+* **intersect** - filters bin selection to specified value 
+* You can use **!** , **&&** , **||** on resulting slections
+
+```sv
+typedef enum bit[2:0] {ADDI, SUBI, ANDI, XORI, JMP, JUMPC. CALL} op_t;
+typedef enum bit[1:0] {REG0, REG1, REG2, REG3} regs_t;
+
+op_t opc;
+regs_t regs;
+
+covergroup cg @(posedge clk);
+  c1 : coverpoint opc;
+  c2 : coverpoint regs;
+  opcxregs = cross c1,c2 { 
+    bins x1 = 
+      binsof (c1) intersect {[ADDI : XORI]} && 
+      binsof (c2) intersect {REG0 , REG3};}
+endgroup
 ```
