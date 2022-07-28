@@ -3763,3 +3763,22 @@ Assertions can be embedded in code, to "travel with" design form
   * Coverage metrics reveal which checks are exercised 
 * Checking assertions consumes CPU cycles
 
+### Assertions-Based Verification
+Assertion-based verification is the structured use of assertions to describe an verify design properties.
+* Assertions monitor and report - expected behavior and forbidden behavior
+* Assertions are used by static verification tools - no test vector, formal (mathematical) proof. Dynamic verification tools - dependent upon simulation test effectiveness (as measured using functional coverage)
+* ABV also encompasses SVA constructs for defining coverage
+
+<img width="494" alt="Screen Shot 2022-07-28 at 23 45 51" src="https://user-images.githubusercontent.com/109002901/181634318-3940deb0-e4dd-489a-9c8f-48356da443d2.png">
+
+### HDL-Based Assertions
+You have been "asserting" correct design condition all along using: **if (!good_condition) $display (error_message);** .
+
+<ins>**Why is ABV Better Than HDL-Based Assertions**</ins>
+ABV goes well beyond HDL-based assertions:
+* Standard language constructs to concisely express complex temporal behaviors (PSL and SVA)
+* Standard tool support taking advantage of new constructs
+  * Failure messaging
+  * Statistics gathering
+  * Debug features 
+* Definition of functional coverage
