@@ -3590,6 +3590,7 @@ endgroup : cg1
 cg1 one = new();
 one.c2.option.auto_bin_max = 256;
 ```
+
 **Type-Specific type_option Fields**
 <img width="1935" alt="Screen Shot 2022-07-28 at 15 26 30" src="https://user-images.githubusercontent.com/109002901/181504592-30f500eb-1f72-4644-903c-deecb78fc5ae.png">
 
@@ -3603,3 +3604,111 @@ cg = allowed for covergroup
 cp = allowed for coverprint
 cc = allowed for cover cross
 
+## Queues and Dynamic and Associative Array
+----
+### Dynamic Arrays
+* Use a dynamic array when an array size must change during simulation - declared by leaving an unpacked dimension unsized **[]** . 
+* A dynamic array doesn't exist until it is explicity created during runtime
+* Use new to create array or change size 
+  * new[size] - create array initialized to default values.
+  * new[size] (array) - create array initilized from existing array 
+* Dynamic array built-in methods - **size()** - returns array size and **delete()** - clears elements ans sets size to 0
+
+```sv
+logic [7:0] dynarr[]; // declare dynamic array 8-bit logic
+
+int index;
+
+initial begin 
+  dynarr = new[8]; // create array of 8-bit logic
+  for (int = 0 ; i <8 ; i++)
+    dynarr[i] = i+1;
+  index = dynarr.size() // 8
+  
+  // resize array keeping values
+  dynarr = new[16] (dynarr);
+  index = dynarr.size(); // 16
+  
+  // delete array
+  dynarr.delete();
+end
+```
+
+### Associative Arrays 
+Use an associative array when the data space is unbounded or sparsely populated.
+Declare the array by specifying a type instead of a size for its one dimension.
+* The key can be any nonreal type for which the equality operator is defined
+* Array elements do not exist until you assigned to them 
+* Array elements are "pairs" of associated key (address) and data values
+* Elements are stored by key, ordered by key
+* 
+
+```sv
+bit [3:0] aa1 [int] // associative array of 4 bit 2-state 
+                    // with index type of int 
+logic [7:0] aa2 [string] // associative array of 8 bit logic 
+                         // with index type of string   
+int aa3 [myclass] // associative array of 4 bit 2-state 
+                  // with index type of myclass
+bit aa4 [byte] // associative array of bit
+               // with index type of byte 
+```
+
+**Associative Array Methods**
+
+<img width="1785" alt="Screen Shot 2022-07-28 at 17 20 49" src="https://user-images.githubusercontent.com/109002901/181538113-720f761f-3583-457e-93ef-db945b7aa3d3.png">
+
+### Queues
+* Queues are dynamically sized, ordered collection of elements of a declared type
+* A queue is declared by specifiying **$** instead of a size for its one dimension 
+* A qeueu supports access to all its elements as well as insertion and removal at the beggining or the end of the queue
+* Each element is identified by a number defining its position in the queue - **0** represent the first location and **$** represents the last location
+
+```sv
+integer q_integer[$]; // queue of integers - queue of unlimited size
+logic [15:0] q_logic[$]; // queue of 16-bit logic
+int q_int[$:2000]; // queue of int - max size of 2000
+time q_time[$:10] // queue of time - max size of 10
+```
+
+**Queue Methods**
+
+<img width="1867" alt="Screen Shot 2022-07-28 at 17 34 20" src="https://user-images.githubusercontent.com/109002901/181553177-d06a77e8-5a17-4d50-b158-4de904b22a39.png">
+
+You can delete with empty queue assignment
+
+### Array Manipulation Methods
+Array manipulation methods are built-in methods that support searching, ordering, and reducing of array. These methods apply to any unpacked array, with the following exceptions: 
+* Locator methods cannot be applied to assoiative arrays that use the wildcard index type
+* Ordering methods cannot be applied to associative arrays
+
+* Locator 
+  * Search array for elements or indexed that satisfy an expressiong - attached using **with**
+  * Return a queue of those elements or indexes
+
+```sv
+// extract all elements from array_int greater than 5
+q_int = array_int.find with (item > 5);
+```
+
+<img width="1447" alt="Screen Shot 2022-07-28 at 17 48 05" src="https://user-images.githubusercontent.com/109002901/181566075-77337a05-cacb-4b3d-aeb5-d50f7d7591ab.png">
+
+* Ordering 
+  * Reorder an array 
+  * Cannot be applied to associative arrays
+
+```sv
+// sort q_int in ascending order 
+q_int.sort;
+```
+
+<img width="1118" alt="Screen Shot 2022-07-28 at 17 48 34" src="https://user-images.githubusercontent.com/109002901/181566267-28c4f028-4306-4f43-83c9-6e625accfc6c.png">
+
+* Reducation 
+  * Reduce an array of integral values to a single value
+
+```sv
+// extract xor reduction of all elements in q_int 
+var_int = q_int.xor;
+
+<img width="1081" alt="Screen Shot 2022-07-28 at 17 49 50" src="https://user-images.githubusercontent.com/109002901/181566792-e069b326-8911-4393-941a-7f21cf89d6cb.png">
