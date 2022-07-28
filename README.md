@@ -3509,7 +3509,6 @@ To define the cover group in the class definitiaon is an intuitive way to define
   * For a design or test component class object, define a sampling event 
   * For a data class object, upon communicating the data object call the cover group method **sample()**.
 
-
 ```sv
 class covlass;
   logic [2:0] address;
@@ -3526,5 +3525,81 @@ class covlass;
 endclass
 
 covclass one = new()
-  one.cg1,dample()
+  one.cg1.sample()
 ```
+
+### Defining a Cover Point Bin for Value Transitions 
+Coverpoints can also track transitions:
+* Single value change
+* Sequence of values
+* Multiple changes between arrays of values
+
+It also allows sequence syntax similar to SystemVerilog Assertions 
+
+
+```sv
+typedef enum bit[2:0] {ADDI, SUBI, ANDI, XORI, JMP, JUMPC. CALL} op_t;
+
+op_t opc;
+
+covergroup cg; 
+  c1 : coverpoint opc { bins adsu ] (ADDI => SUBI); // 1 transition
+    bins suan = (ADDI => SUBI => ANDI); // 1 sequence transition
+    bins su3 = (ADDI , SUBI => ANDI); // ADDI => ANDI , SUBI => ANDI
+                                      //  2 transitions
+    bins sud = (ANDI[*3]) ;}; // ADDI => ADDI => ADDI 
+```
+
+### How to Specify Coverage Options
+SystemVerilog provides options to control the behavior of :
+* Covergroups 
+* Coverpoints
+* Crosses
+
+There are two types of options:
+1. Type options 
+  * Affect every instance (static)
+  * Set with **type_option** 
+
+2. Instance-specific options 
+* Can be set on idividual instances
+* Set with **option**
+
+
+```sv
+// type option
+int a,b;
+covergroup cg1 @(posedge clk);
+  c1 : coverpoint a {
+    type_option.comment = "a";}
+  c2 : coverpoint b;
+endgroup : cg1
+
+cg1:type_option.comment = "ab";
+```
+
+```sv
+// instance option
+int a,b;
+covergroup cg1 @(posedge clk);
+  c1 : coverpoint a {
+    option.auto_bin_max = 10;
+  c2 : coverpoint b;
+endgroup : cg1
+
+cg1 one = new();
+one.c2.option.auto_bin_max = 256;
+```
+**Type-Specific type_option Fields**
+<img width="1935" alt="Screen Shot 2022-07-28 at 15 26 30" src="https://user-images.githubusercontent.com/109002901/181504592-30f500eb-1f72-4644-903c-deecb78fc5ae.png">
+
+**Instance-Specific option Fields**
+<img width="1932" alt="Screen Shot 2022-07-28 at 15 27 11" src="https://user-images.githubusercontent.com/109002901/181504704-6d3a7bbd-e4c5-47f3-82aa-604c121728cf.png">
+
+**Covergroup Methods**
+<img width="1838" alt="Screen Shot 2022-07-28 at 15 27 28" src="https://user-images.githubusercontent.com/109002901/181504748-7abce994-862e-44db-8e3c-7e9c833b25f7.png">
+
+cg = allowed for covergroup
+cp = allowed for coverprint
+cc = allowed for cover cross
+
