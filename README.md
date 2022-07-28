@@ -3710,5 +3710,13 @@ q_int.sort;
 ```sv
 // extract xor reduction of all elements in q_int 
 var_int = q_int.xor;
+```
 
 <img width="1081" alt="Screen Shot 2022-07-28 at 17 49 50" src="https://user-images.githubusercontent.com/109002901/181566792-e069b326-8911-4393-941a-7f21cf89d6cb.png">
+
+## Assertion Based Verification 
+----
+### Assertion 
+An assertion is a directive to an EDA tool to verify that a property is always true.
+* A property is a description of design behavior
+* We instruct the tool what to do with the property using verifiction directives - **assert**, **cover** , **assume** and **restrict**
