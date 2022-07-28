@@ -3204,3 +3204,129 @@ initial begin
   •••
 end
 ```
+
+## Covergroup Coverage
+---- 
+### Structural and Functional Coverage
+Structural metrics (code coverage) are tool-instrumented monitors to check:
+* Execution of design blocks, lines or statements
+* Assignments of values to variables
+
+Code coverage is: 
+* Instrumented by tool - tool blindly focuses on individual items
+* Less difficult to set up 
+* More difficult to analyze 
+
+Functional metrics are user-defined scenarios to check:
+* Assignments of sequences of values to variables
+* Stepping of the design through control states (transactions)
+
+Functional coverage is a measure of what functionalities/features of the design have been exercised by the tests. This can be useful in constrained random verification (CRV) to know what features have been covered by a set of tests in a regression.
+
+Functional coverage is:
+* Insturmented by user - user specifies scenarions, corner cases , protocols...
+* More difficult to set up          
+
+**Functional coverage complements but does not replace code coverage**
+
+### Data-Oriented and Control-Oriented Functional Coverage
+Data-oriented functional coverage defines a coverage model to capture value changes/signals transitions.
+* Covergroups for data oriented functional coverage 
+
+```sv
+covergroup cg @ (posedge clk);
+  cpa: coverpoint addr
+  { bins low = { [0;'h0F] , 19};
+    bins mid = { 16 , 17 ,18 {;
+    bins higs = { ['h14 : 'hFF] }; }
+  addrxvalid : cross cpa, valid;
+endgroup
+ch ch1 = new();
+```
+
+Control-oriented functional coverage is sequence of control states. 
+* SystemVerilog Asserions for control-oriented functional coverage
+
+```sv
+property reg_gnt (cyc);
+  @ (posedge clk)
+    reg ##[cyc] gnt;
+endproperty
+
+Coverqgnt_3 : cover property (req_gnt(3));
+Coverqgnt_4 : cover property (req_gnt(4));
+Coverqgnt_5 : cover property (req_gnt(5));
+```
+
+### Data-Oriented Functional Coverage
+Data-oriented functional coverage is user-instumented coverage using SystemVerilog cover groups to focus of design data. 
+The following are some key aspects of data-oriented functional coverage:
+* It is user specified - not automatically inferred from the design 
+* You write a test plan capturing the functionality to be tested:
+  * Based on design specification and independent of actual implementation - less likely to verify "what I built" rather than "what is        should have built.
+  * Needs to capture how to test given feature , how to check the test passes and how to measure the test is successfully applied (coverage).
+* Coverage model is defined based on the test plan
+* The simulator counts how many times a variable hits the value or transitions defined in the coverage model
+
+### Cover Group
+A covergroup is userdefined type specifying a coverage model. the user can construct multiple instances of that type in different contexts.
+* Define a coverage module using **covergroup** keyword and you can declare it in a package/interface/module/program/class
+* A covergroup contains:
+  * A **sampling event** whose coverage can be manually sampled
+  * A **coverprint** for each variable to track which can also track integral expressions
+* Define a variable covergroup name
+* Instantiate the coverage model using **new** - one covergroup can have multiple instantiations in different contexts.
+
+```sv
+module example;
+  logic clk;
+  logic [2:0] address;
+  logic [7:0] data;
+  
+  covergroup cg1 @(posedge clk);
+    c1 : coverprint address;
+    c2 : coverprint data;
+  endgroup : cg1
+  
+  cg1 cover_inst = new();
+endmodule
+```
+
+### Coverpoint and Automatically Created Cover Point Bins
+A **cover point** is a user defined item in a coverage model specitying an expression to cover and optionally a condition guarding its sampling. A **coverage bin** is a tool-defined or user-defined counter associated with a cover point value set, a cover point value transition set, or a cover cross tuple set. **Automatic cover point bin** - by default, the tool automaticaly creates a unique bin for rach value.
+* Each coverpoint generatres a series of counters (bins) - stored in a database
+* By default - there is one for each coverprint value - up to a preset limit and named **auto[<value]>**
+* At every sample point, the corresponding bin for the coverprint value is incremented.
+
+```sv
+module example;
+  logic clk;
+  logic [2:0] address;
+  logic [7:0] data;
+  
+  covergroup cg1 @(posedge clk);
+    c1 : coverprint address;
+    c2 : coverprint data;
+  endgroup : cg1
+  
+  cg1 cover_inst = new();
+endmodule
+```
+
+### Cover Point Bin for Values (Explicit Bins)
+* You can define the bins yourself - to track only a subset of values and to control whats values increment which bin 
+* Use the **bins** keyword and provide a bin name and a list of value ot value ranges 
+* With explicit bins, unlisted values are not tracked
+* Each coverprint can have multiple **bins** clauses 
+
+```sv
+c1 : coverprint var1 {
+  bins V = {1,2,5}; } // Bin V increments for var1 = 1, 2 or 5
+  } // No semicolon at end of coverpoint with explicit bins
+  
+// value list examples
+/* { [0:5] , 10} - values 0-5 and 10  
+{ [0:5] , [9:14} - values 0-5 and 9-14
+*/
+
+```
