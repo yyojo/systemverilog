@@ -3450,3 +3450,81 @@ covergroup cg @(posedge clk);
       binsof (c2) intersect {REG0 , REG3};}
 endgroup
 ```
+
+### Defining Cover Cross with illegal and Ignored Cross Bins
+* Use **ignore_bins** to excludes bins from a cross - even if selected elsewhere in the same cross.
+* Use **illegal_bins** to specify illegal bins - even if selected or excluded elsewhere in the same cross.
+
+```sv
+typedef enum bit[2:0] {ADDI, SUBI, ANDI, XORI, JMP, JUMPC. CALL} op_t;
+typedef enum bit[1:0] {REG0, REG1, REG2, REG3} regs_t;
+
+op_t opc;
+regs_t regs;
+
+covergroup cg @(posedge clk);
+  c1 : coverpoint opc;
+  c2 : coverpoint regs;
+  opcxregs = cross c1,c2 { 
+    bins x1 = ! binsof(c2) intersect {[REG2:REG3]};
+    ignored_bins x2 = binsof(c1) intersect {[JMP:JUMPC]};
+    // x1 - select all bins nuo of REG2 or REG3 but ignore all JMP or JUMPC bins
+endgroup
+```
+
+### Defining Easier Cover Cross Bins 
+Complex cross expressions can be avoided using dedicated coverpoints:
+* Define multiple coverpoints for required values or ranges
+* Cross coverpoints directly
+
+
+```sv
+typedef enum bit[2:0] {ADDI, SUBI, ANDI, XORI, JMP, JUMPC. CALL} op_t;
+typedef enum bit[1:0] {REG0, REG1, REG2, REG3} regs_t;
+
+op_t opc;
+regs_t regs;
+
+covergroup cg @(posedge clk);
+  c1 : coverpoint opc;
+  c1nj : coverpoint opc {
+    bins opnj = {[ADDI:XORI] , CALL};}
+    
+  c2 : coverpoint regs;
+  c201 : coverpoint regs {
+    bins reg01 = {REG0,REG1};}
+    
+  oxpr : cross cl1nj, c201 ; // one bin opxr.<opnj,re01>
+  // select all bins not of REG2 or REG3 but ignore JMP , JUMPC bins
+endgroup
+```
+
+### Cover Groups in Classes 
+To define the cover group in the class definitiaon is an intuitive way to define the coverage model for the class.
+1. Define the class member cover group instance
+  * The declaration create and instance variable of the anonymous cover group type - you cannot create another instance of that type
+  * The cover group definition can acess any class properties - even if **protected** or **local**
+2. Construct the cover group instance 
+3. Define cover group smapling 
+  * For a design or test component class object, define a sampling event 
+  * For a data class object, upon communicating the data object call the cover group method **sample()**.
+
+
+```sv
+class covlass;
+  logic [2:0] address;
+  logic [7:0] data;
+  
+  covergroup cg1;
+    c1 : coverpoint address 
+    c2 : coverpoint data;
+  endgroup cg1;
+  
+  function new();
+    cg1 = new(); // a class covergroup insance is not separatly named
+  endfunction
+endclass
+
+covclass one = new()
+  one.cg1,dample()
+```
