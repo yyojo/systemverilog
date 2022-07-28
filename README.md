@@ -3377,6 +3377,10 @@ ce : coverpoint var1 {
   // 1 bin for {4,5,7,8}
   bins f = default;
 ```
+**Notice!**
+The illegal_bins will report error in simulation immediately when its bins hit.
+The ignore_bins won't show error in simulation.
+Your testbench should never hit illegal_bins. If it does, your testbench or design has a problem and all coverage is meaningless.
 
 ### Cover Cross
 A cover cross is a user-defined item in a coverage model specifying a cross-product of cover points to cover and any optionally a condition guarding is sampling.
