@@ -3720,3 +3720,11 @@ var_int = q_int.xor;
 An assertion is a directive to an EDA tool to verify that a property is always true.
 * A property is a description of design behavior
 * We instruct the tool what to do with the property using verifiction directives - **assert**, **cover** , **assume** and **restrict**
+* An assertion is a check that a property is always true 
+* During verification, assertions continually observe: 
+  * If a specific condition accurs or 
+  * If a specific sequence of events occurs
+* Assertions offer a way to signicantly enchance productivity for designers - find bugs earlier and more easily 
+
+<img width="725" alt="Screen Shot 2022-07-28 at 18 27 46" src="https://user-images.githubusercontent.com/109002901/181577056-5200a5dc-19f5-4d12-92ef-6154ad12bd1b.png">
+
