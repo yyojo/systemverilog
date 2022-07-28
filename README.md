@@ -3728,3 +3728,38 @@ An assertion is a directive to an EDA tool to verify that a property is always t
 
 <img width="725" alt="Screen Shot 2022-07-28 at 18 27 46" src="https://user-images.githubusercontent.com/109002901/181577056-5200a5dc-19f5-4d12-92ef-6154ad12bd1b.png">
 
+<ins>**Why Use Assertions**</ins>
+
+Improve observability 
+* Automatically and constanly checks behavior
+* Can detect hard-to-find bugs embedded deep in the design 
+* Isolates problem close to source 
+* Can be applied non-intrusively to legacy designs
+
+Improves verification efficiency 
+* Can concisely and unambiguously document design intent 
+* Encapsulation and reuse 
+* Can detect bugs earlier in the design cycle 
+* Trap and exit on errors, saving simulation cycles
+* Writing assertions helps designers to better understand their design and do more debugging
+
+Assertions can be embedded in code, to "travel with" design form
+* Project to project - ideal for IP
+* Tool to Tool - ideal for design methodology interity 
+
+<ins>**Who Writes Assertions and Why**</ins>
+
+<img width="1898" alt="Screen Shot 2022-07-28 at 18 39 06" src="https://user-images.githubusercontent.com/109002901/181579626-834f7360-5f22-4815-a5c9-8f676dc4b8ce.png">
+
+<ins>**Issues with Assertions**</ins>
+
+* Assertions must be constructed with care:
+  * Incorrectly specified assertions can give misleading results
+  * Debugging an assertion can be difficult 
+* How do you know when enough assertions have been written
+* It is easy to shoot yourself in the foot using overly complex SVA constructs - the syntax "sugared" - simplaicity of the syntax hids complex overlapping behaviors
+* Qulity of test stimulus is critical
+  * The simulator can make only those checks which the test exercises
+  * Coverage metrics reveal which checks are exercised 
+* Checking assertions consumes CPU cycles
+
