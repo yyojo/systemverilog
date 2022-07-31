@@ -3790,3 +3790,41 @@ ABV goes well beyond HDL-based assertions:
 ## Introduction to SystemVerilog Assertions 
 ----
 ### Concurrent Assertions
+Concurrent assertions describe behavior that spans over time. Unlike immediate assertions, the evaluation model is based on a clock so that a concurrent assertion is evaluated only at the occurrence of a clock tick.
+* Concurrent assertions can be embedded in functional code and ignored by synthesis
+* They are supported by mainstrean simulator are formal verification tool
+* You can define and assert the functional properties of a design with concurrent assertions:
+  * Boolean expressions about some behavior design
+  * What it should or should not do 
+  * Can be single od multiple cycle
+  * Uses Verilog syntax
+  * Mathematically precise and computationality efficient - sufficiently expressive to specify "real world" design properties 
+
+
+### Concurrent Assertions Structure
+
+<img width="1797" alt="Screen Shot 2022-07-31 at 09 02 58" src="https://user-images.githubusercontent.com/109002901/182012517-30671527-5bce-4d94-af2f-dab7b6e92296.png">
+
+### Concurrent Assertions Placement
+* Properties are declared as normal SystemVerilog declarations - usually in a module or interface
+* Properties are asserted as concurrent statement - usually in a module of interface 
+* Also legal inside an always or initial block - strong recommendation not to do this
+
+
+```sv
+module mod (input logic clk, output logic en1, en2);
+
+  always @ (negedge clk)
+    begin 
+      (en1,en2) <= sel[1:0];
+    end
+  
+  'ifndef USING_OLD_TOOL
+    property RW_CHK_CLK;
+      @ (negedge clk) en1 || en2;
+    endproperty 
+    
+   A1 : assert property (RW_CHK_CLK); 
+   'endif
+endmodule
+```
