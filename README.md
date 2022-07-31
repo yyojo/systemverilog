@@ -4116,3 +4116,102 @@ The SystemVerilog Assertions class covers all the above including the following:
 * Practical examples
 * Formals Friendly SVA coding
 * Use of Verilog helper code to simplify verification using SVA properties 
+
+
+## Interproccess Synchronization
+----
+### Blocking Event Trigger - >
+* Traditional Verilog event trigger is blocking - triggered instantaneoulsy in Active region when executed
+* Synchronization can be difficult - proccess to be triggered must be waiting for the event when its occurs
+
+```sv
+event e;
+integer i = 0;
+
+always @e $display ("i:%0d",i);
+
+initial begin 
+  i <= 1;
+  -> e; // blocking i:0
+```
+
+### Nonblocking Event Trigger - ->>
+* You can trigger SystemVerilog events with nonblocking **->>** operator:
+  * Executes without blocking 
+  * Schedules an event for the NBA region
+  * Helps prevent races between proccesses
+  * Can include optional embedded event control
+
+
+```sv
+event e;
+integer i = 0;
+
+always @e $display ("i:%0d",i);
+
+initial begin 
+  i <= 1;
+  ->> e; // nonblocking i:1
+  
+  ->> #3 e;
+  ->> @ (posedge clk) e;
+```
+
+### Persistent Event Trigger - triggered
+A proccess can wait for the **triggered** property of the event - the **triggered** state persists to the end of the time step
+
+```sv
+event e1, e2;
+
+initial begin 
+  $display ("fork");
+  fork 
+    @e1;
+    -> e1;
+    -> e2;
+    @e2;
+  join 
+  $display("join);
+  // output - fork
+```
+
+```sv
+event e1, e2;
+
+initial begin 
+  $display ("fork");
+  fork 
+    @e1;
+    ->> e1;
+    -> e2;
+    wait (e2.triggered);
+  join 
+  $display("join);
+  // output - fork join
+```
+
+### Mailbox
+* Mailboxes are a message-based synchronization mechanism
+  * Used for passing messages where order is important (FIFO)
+  * Intended for interpocedure communication and synchronization
+
+* Mailboxes can block procedure execution
+  * Writing to a full mailbox blocks until the mailbox is no longer full
+  * Reading from an empty mailblock blocks untill the mailbox is no longer empty
+
+* Mailboxes can be bound (to set size) or unbound - Unbounded mailboxes can never be full
+* Mailboxes can be type-less or parameterized:
+  * Each type-less (default) mailbox can contain data of different types 
+  * Parameterized mailbox can contain only one type of data 
+  * Mailbox connections 
+
+```sv
+mailbox hugebox = new; // mailbox of unlimited size
+
+mailbox fourbox;;
+fourbox = new(4); // mailbox of size 4 
+```
+
+<ins>**Mailbox Methods**</ins>
+
+<img width="1901" alt="Screen Shot 2022-07-31 at 14 12 00" src="https://user-images.githubusercontent.com/109002901/182023511-17c90abb-cddf-495d-9a9d-24b3bf22eba7.png">
