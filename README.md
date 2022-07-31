@@ -3879,3 +3879,84 @@ endproperty
 Assertions are sempled, clocked and evaluated at strictly deifined poinrs in the simulation cycle.
 * Property variables are sampaled in the preponed region 
 * Properties are evaluated in observed region using preponed values 
+
+
+### Assertion Binding 
+Binding allow to specify one or more instantiations of an assertions module , interface program ot checker without modifying the code of the target with **bind** construct.
+* The **bind** statement can be placed literally anywhere 
+* Instantiates an assertion module in instance(s) of hierarchical design module 
+
+<ins>**Advantages**</ins>
+
+* No changes to design module
+* Easier to modify and update
+* Enhances reusability
+
+* Can bind to all of specific instances of a design module:
+  * To bind to every instatiations of **mone** 
+```sv
+bind mone mone_prop...
+```
+  * To bind only to instatiations **m1** of **mone** 
+```sv
+bind mone:m1 mone_prop...
+```
+
+```sv
+// assertion module
+module mone_prop(input a,b,clk);
+  property P1;
+    @ (posedge clk) $ros(a) |=> b;
+  endproperty
+  A1 : assert property (P1);
+endmodule
+```
+
+```sv
+// design module 
+module mone (input logic clk, reg , 
+  output logic ack);
+  
+  logic half, empty,full; // internal signals 
+  ~~mone_prop mp1 (reg , ack, clk);~~ // moved to testbench
+endmodule
+```
+
+```sv
+// testbench module 
+module top;
+  
+  // instantiate design modules 
+  mone m1 (clk , req1 ack1);
+  mone m2 (clk , req2, ack2);
+  
+  // design module , assertion module , instantiation name , design module var
+  bind mone mone_prop mp1 (reg,ack, clk, hald ,empty ,full); // signal names in design
+                                                           // module scope
+  
+endmodule
+```
+
+<ins>**Application**</ins>
+
+Connecting assertion moudle port signals to internal signals of the design module using **bind** .
+
+* Internal signals o design module van be connected to port signals of assertion module
+* If names don't match, the **.name** notation can be used for connection
+
+### Sequence Expression
+A sequence expression describes a series of one or more cycles of design signal states (each cycle desribed by a boolean expression).
+* Simple boolean properties are instantaneous - signal pass/fail test at the evaluation point
+* Multi-cycle properties are described using sequences: 
+  * Series of boolean equations
+  * Evaluated in successive clocking cycles
+  * Each cycle separated by ##N
+* Sequences are building blocks of properties 
+* There is a wide range of operators and features to construct complex sequences - if-then implication , repetition , composition operators
+
+```sv
+@ (negedge clk)
+a ##1 b ##1 c;
+```
+
+<img width="715" alt="Screen Shot 2022-07-31 at 10 38 53" src="https://user-images.githubusercontent.com/109002901/182015339-6a69e036-fab4-47f3-9809-4d0f975ca4dc.png">
