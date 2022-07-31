@@ -3982,6 +3982,7 @@ expra |-> exprb
 ```sv
 property SCI;
   @ (negedge clk)
+    // check the condition only when req is high and ack is low 
     (reg && !ack) |-> bsy;
 endproperty
 ```
