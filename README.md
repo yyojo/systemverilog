@@ -3810,6 +3810,10 @@ Concurrent assertions describe behavior that spans over time. Unlike immediate a
 * Properties are asserted as concurrent statement - usually in a module of interface 
 * Also legal inside an always or initial block - strong recommendation not to do this
 
+Test expression is evaluated at clock edges based on values in sampled variables
+Sampling of variables is done in the preponed region and evaluation of the expression is done in the observed region of the simulation scheduler.
+It can be placed in a procedural, module, interface, or program block
+It can be used in both dynamic and formal verification techniques
 
 ```sv
 module mod (input logic clk, output logic en1, en2);
@@ -3828,3 +3832,50 @@ module mod (input logic clk, output logic en1, en2);
    'endif
 endmodule
 ```
+
+### Defining a Simple Property 
+* Define a design behavior as a Verilog Boolean expression
+* Any expression allowed in an **if** condition can be used ,including functions and out of module references 
+* Subject to normal Verilog restrictions, particulary - case sensitivity and naming rules 
+
+### Naming and Asserting the Property 
+You have two options: 
+* Declare and instance the property on the same line 
+
+```sv
+ASSERT : assert property ( @ (posedge clk) en1 || en2);
+```
+
+* Declare and instance the property in separate statements - gives more flexability and property can have arguments 
+
+```sv
+property RW_CHK;
+  @ (posedge clk) en1 || en2;
+endproperty
+// Always label assertions 
+ASSERT1 " assert property (RW_CHK); // parentheses for named property required
+```
+
+### Clocking the Property 
+* Properties are evaluated upon standart Verilog clocking events
+  * **@identifier** or **@(event expression)**
+  * Can alsu use SystemVerilog enhancements (such as **iff**
+* All assertions must be clocked 
+* Clocking expression does not need to be a design hardware clock or periodic 
+* Good clocking expression can be greatly simplify properties 
+* A default clock can be specified 
+
+```sv
+property RW_CHK;
+  @ (posedge clk iff VALID) en1 || en2;
+endproperty
+
+property HW_CHK;
+  @ (negedge addr_en) addr <= 7;
+endproperty
+```
+
+### Assertion Evaluation
+Assertions are sempled, clocked and evaluated at strictly deifined poinrs in the simulation cycle.
+* Property variables are sampaled in the preponed region 
+* Properties are evaluated in observed region using preponed values 
