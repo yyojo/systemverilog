@@ -4215,3 +4215,80 @@ fourbox = new(4); // mailbox of size 4
 <ins>**Mailbox Methods**</ins>
 
 <img width="1901" alt="Screen Shot 2022-07-31 at 14 12 00" src="https://user-images.githubusercontent.com/109002901/182023511-17c90abb-cddf-495d-9a9d-24b3bf22eba7.png">
+
+### Parameterized Mailboxes
+You can type-parameterize a mailbox:
+* Define type upon declaration **mailbox #(type) namebox = new;**
+* Holds messages of that and equivalent types
+* Compiler detects type mismatch
+
+### Semaphore
+* Semaphores are a key-based synchronization mechanism
+* They are intended for process synchronization, mutal exclusion and controlling access to a shared or limited resource 
+  * A procedure requests semaphore key(s) before accessing the resource
+  * A procedure returns semaphore key(s) after accessing the resource
+* Semaphores can block procedure execution - if the procedure requests more keys than the semaphore holds, the execution is blocked untill sufficient keys are returned
+* Key management is the responsibility of the designer
+
+```sv
+semaphore keybox = new(5); // semaphore with 5 keys
+
+semaphore sync;
+sync = new(4); // semaphore with 4 keys
+```
+
+<ins>**Semaphore Methods**</ins>
+
+<img width="1928" alt="Screen Shot 2022-07-31 at 14 25 08" src="https://user-images.githubusercontent.com/109002901/182023980-3e17d747-3c71-4fd4-93d8-c84dd5ebf913.png">
+
+### Event Variables
+A SystemVerilog event variable is a handle pointer to a synchronization queue.
+* You can assign and compare these handles to each other - assignment causes both handles to point to the same queue
+
+```sv
+event e1, e2;
+initial 
+  fork 
+    #1 e2 = e1; // e1, e2 both have 21 synchronization queue
+    #2 @e1 $display ("e1 triggered");
+    #2 @e2 $display ("e2 triggered");
+    #3 -> e2; // trigger e2 (and also e1)
+  join
+// output : e1 is triggered , e2 is triggered
+```
+
+### Merging Events
+Merging events merges only the event variables - both now point to the RHS synchronization queue.
+
+```sv
+event e1, e2;
+initial 
+  fork 
+    #1 @e1 $display ("e1 triggered");
+    #1 @e2 $display ("e2 triggered");
+    #1 e2 = e1; // e1, e2 both have 21 synchronization queue
+                // e2 synchronizaiton queue is lost 
+    #3 -> e2; // trigger e2 (and also e1)
+  join
+// output : e1 is triggered 
+```
+
+### Reclaiming Events
+You can assign **null** value to an event.
+* Triggered a null event shall have no effect 
+* The effect of waiting on null event is undefined
+
+```sv
+event e1;
+initial 
+  fork 
+    #1 @e1 $display ("e1 triggered once");
+    #2 -> e1 $display ("e2 triggered");
+    #3 e1 = null; // e2 synchronizaiton queue is lost 
+    #4 -> e1 $display ("e2 triggered twice"); // @e1 may not block
+                                              // or may block forever
+    #5 -> e1; // nothig happens
+              // triggering null event e1 has no effect
+  join
+// output : e1 is triggered once
+```
