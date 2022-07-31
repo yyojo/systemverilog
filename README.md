@@ -4012,3 +4012,107 @@ endproperty
 ```
 <img width="875" alt="Screen Shot 2022-07-31 at 10 54 01" src="https://user-images.githubusercontent.com/109002901/182015834-1847e4a5-46ee-4dd1-a3f6-29734daab8bd.png">
 
+<ins>**Pictorial View of Assertion Property Evaluation States**</ins>
+
+An assertion can be in one of several states:
+
+<img width="1740" alt="Screen Shot 2022-07-31 at 12 48 56" src="https://user-images.githubusercontent.com/109002901/182020644-8b332dcf-960a-4f92-a0bb-aa7909a849d6.png">
+
+### Disabling Properties with disiable iff
+* To terminate an assertion when a condition is true use **disable iff**
+* if **expr** is true at any time, then the property is terminated 
+* Disable expression must be bracketed ()
+* Useful for cancelling multi-cycle sequence properties - for example,burst on a bus interrupted by reset 
+* A default disable can be specified
+
+```sv
+property NAME;
+  @(clocking) disable iff (expr)
+    the_property;
+endproperty
+```
+```sv
+property ABORT;
+  @ (negedge clk) disable iff (rst)
+    a |=> b ##1 c ##1 d;
+endproperty
+```
+<img width="828" alt="Screen Shot 2022-07-31 at 13 03 39" src="https://user-images.githubusercontent.com/109002901/182021199-f10a985a-7c78-4dd5-be66-58ecc8be19d2.png">
+
+### Cycle Delay Repetition 
+* **##** can be used with any constant integral expression to define a number of cycle delays.
+* After expr1, count N evaluation points, after which **expr2** must be true
+* ##0 is allowed (and useful) for sequences - zero delay ("fusion")
+
+```sv
+property A3B_NEXT;
+// if a is low then b is high 4 cycles later
+  @ (negedge clk) !a |=> ##b;
+```
+
+### Consecutive Sequence Repetiton
+You can specify multiple consecutive repetition using **[* N]** :
+* Consecutive repetition operator
+* **expr** repeats consecutively N times
+* N must be a non-negativ integer constant expression
+
+```sv
+expr[*N]
+```
+
+```sv
+// instead of this
+property SEQ_COUNT;
+  @ (negedge clk) !a ##1 !a ## 1 !a ##1 !a |=> a;
+endproperty
+
+// write this
+property CONSEC;
+// a is never low more than 4 cycles
+  @ (negedge clk) !a[*4] |=> a;
+endproperty
+```
+
+<img width="940" alt="Screen Shot 2022-07-31 at 13 21 46" src="https://user-images.githubusercontent.com/109002901/182021757-95f238cf-eb43-40d8-8c3d-39f1fd188c79.png">
+
+### Consecutive Repetition with Ranges 
+* You can specify a range for consecutive repetition
+* **expr** repeats consecutively for:
+  * At least **min** number of times 
+  * At most **max** number of times 
+* Range limits must be non-negative interger constant expressions:
+  * **min** can be 0 - no repetitions
+  * **max** can be $ (unlimited) - can repeat forever
+  * **min** <= **max**
+
+```sv
+expr[*min:max]
+```
+
+```sv
+property RANGE;
+  @ (negedge CLK)
+  // a goes low in between 2 and 4 cycles only 
+    a ## 1 !a |=> !a[*1:3] ##1 a;
+```
+
+<img width="840" alt="Screen Shot 2022-07-31 at 13 32 13" src="https://user-images.githubusercontent.com/109002901/182022082-bece5f13-f452-46c3-8551-7089e78dad30.png">
+
+### Additional SVA Features
+SystemVerilog has many more advanced properties, sequence operators and features: 
+1. Conditional property operators 
+2. Nonconsectuive sequence repitition
+3. Concurrent , alternate and overlapping 
+
+<ins>**Advance SVA feature**</ins>
+
+* Detectiong the end of a sequence 
+* Parameterized sequences and properties
+* Action blocks on property pass or failure
+* Functional coverage 
+
+The SystemVerilog Assertions class covers all the above including the following:
+* Coding guidelines and recommendations
+* Practical examples
+* Formals Friendly SVA coding
+* Use of Verilog helper code to simplify verification using SVA properties 
