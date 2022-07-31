@@ -3960,3 +3960,54 @@ a ##1 b ##1 c;
 ```
 
 <img width="715" alt="Screen Shot 2022-07-31 at 10 38 53" src="https://user-images.githubusercontent.com/109002901/182015339-6a69e036-fab4-47f3-9809-4d0f975ca4dc.png">
+
+### Defining a Cycle Delay 
+
+<img width="2064" alt="Screen Shot 2022-07-31 at 10 41 16" src="https://user-images.githubusercontent.com/109002901/182015422-53adc4ab-ada2-4911-80f9-c4e056587b9f.png">
+
+### Implication |-> : Same Cycle 
+* Conditional properties are deifned with implication operators:
+  * If **expra** is true, then **exprb** must occur
+  * if **expra** is not true, then **exprb** is not checked
+* For the same cycle implication **exprb** must be true in the same cycle as **expra**
+* For implication properties:
+  * **expra** is the antecedent ot enabling condition
+  * **exprb** is the consequent or fulfilling condition
+  * Both can be either sequences or boolean conditions
+
+```sv
+expra |-> exprb
+```
+
+```sv
+property SCI;
+  @ (negedge clk)
+    (reg && !ack) |-> bsy;
+endproperty
+```
+
+<img width="830" alt="Screen Shot 2022-07-31 at 10 46 55" src="https://user-images.githubusercontent.com/109002901/182015617-5a8a918e-fc70-4d17-9e79-a9a6e324e1fb.png">
+
+
+### Implication |=> : Next Cycle 
+* For the next cycle implication, **exprb** must be true in the cycle after **expra** completes.
+* Otherwise, same rules apply:
+  * If **expra** is true, then **exprb** must occur
+  * if **expra** is not true, then **exprb** is not checked
+  * Both can be either sequences or boolean conditions
+* If a variable is not included in a condition, its value is "don't care":
+  * **bsy** is not checked in enabling condition 
+  * reg and ack are not checked in the fulfilling condition 
+
+```sv
+expra |=> exprb
+```
+
+```sv
+property NCI;
+  @ (negedge clk)
+    (reg && !ack) |=> bsy;
+endproperty
+```
+<img width="875" alt="Screen Shot 2022-07-31 at 10 54 01" src="https://user-images.githubusercontent.com/109002901/182015834-1847e4a5-46ee-4dd1-a3f6-29734daab8bd.png">
+
