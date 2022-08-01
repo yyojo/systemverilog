@@ -4,7 +4,7 @@ SystemVerilog Fundamentals
 
 * [Timing Control](#timing-control)
 * [Data Types and Literals](#data-types-and-literals)
-* [Control Flow](#control-flow)
+* [Procedural Statements and Procedural Blocks](#control-flow)
   * [Rational Operators](#rational-operators)
   * [Logic Operators](#logic-operators)
   * [If-Else Statements](#if-else-statements)
