@@ -1,5 +1,34 @@
 SystemVerilog Fundamentals
 =================
+## Table of Contents
+
+* [Timing Control](#timing-control)
+* [Data Types and Literals](#data-types-and-literals)
+* [Control Flow](#control-flow)
+  * [Rational Operators](#rational-operators)
+  * [Logic Operators](#logic-operators)
+  * [If-Else Statements](#if-else-statements)
+  * [Switch Statements](#switch-statements)
+  * [For Loops](#for-loops)
+  * [While Loops](#while-loops)
+  * [Break and Continue](#break-and-continue)
+* [Pointers](#pointers)
+  * [Arrow Operator](#arrow-operator)
+* [Arrays](#arrays)
+* [Functions](#functions)
+  * [Functions in Header Files](#functions-in-header-files)
+  * [Pass Variables by Reference](#pass-variables-by-reference)
+* [Classes](#classes)
+  * [this Pointer](#this-pointer)
+* [Templates](#templates)
+  * [Generic Functions](#generic-functions)
+  * [Generic Classes](#generic-classes)
+* [Inheritance](#inheritance)
+* [Polymorphism](#polymorphism)
+  * [Compile Time Polymorphism - Overloading](#compile-time-polymorphism---overloading)
+  * [Runtime Polymorphism - Virtual Functions](#runtime-polymorphism---virtual-functions)
+* [Vectors and Iterators](#vectors-and-iterators)
+
 
 ## Timing Control
 ----
@@ -32,7 +61,6 @@ If an expression evaluates to the same result, then it cannot be considered as a
 ## Data Types and Literals
 ----
 The Verilog datatypes have 4-state values: 0, 1, X, Z. SystemVerilog adds 2-state value types: bit, byte, shortint, int and long int: 
-
 
 <img width="988" alt="Screen Shot 2022-07-21 at 09 26 57" src="https://user-images.githubusercontent.com/109002901/180144279-e933bcee-43e1-4ffd-8233-64a8f0651a67.png">
 
