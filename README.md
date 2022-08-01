@@ -4,31 +4,7 @@ SystemVerilog Fundamentals
 
 * [Timing Control](#timing-control)
 * [Data Types and Literals](#data-types-and-literals)
-* [Procedural Statements and Procedural Blocks](#control-flow)
-  * [Rational Operators](#rational-operators)
-  * [Logic Operators](#logic-operators)
-  * [If-Else Statements](#if-else-statements)
-  * [Switch Statements](#switch-statements)
-  * [For Loops](#for-loops)
-  * [While Loops](#while-loops)
-  * [Break and Continue](#break-and-continue)
-* [Pointers](#pointers)
-  * [Arrow Operator](#arrow-operator)
-* [Arrays](#arrays)
-* [Functions](#functions)
-  * [Functions in Header Files](#functions-in-header-files)
-  * [Pass Variables by Reference](#pass-variables-by-reference)
-* [Classes](#classes)
-  * [this Pointer](#this-pointer)
-* [Templates](#templates)
-  * [Generic Functions](#generic-functions)
-  * [Generic Classes](#generic-classes)
-* [Inheritance](#inheritance)
-* [Polymorphism](#polymorphism)
-  * [Compile Time Polymorphism - Overloading](#compile-time-polymorphism---overloading)
-  * [Runtime Polymorphism - Virtual Functions](#runtime-polymorphism---virtual-functions)
-* [Vectors and Iterators](#vectors-and-iterators)
-
+* [Procedural Statements and Procedural Blocks](#procedural-statements-and-procedural-blocks)
 
 ## Timing Control
 ----
