@@ -5,6 +5,15 @@ SystemVerilog Fundamentals
 * [Timing Control](#timing-control)
 * [Data Types and Literals](#data-types-and-literals)
 * [Procedural Statements and Procedural Blocks](#procedural-statements-and-procedural-blocks)
+* [Operators](#operators)
+* [User-Defined Data Types and Structures](#user-defined-data-types-and-structures)
+* [Hirearchy and Connectivity](#hirearchy-and-connectivity)
+* [Static Arrays](#static-arrays)
+* [Tasks and Functions](#tasks-and-functions)
+* [Interfaces](#interfaces)
+* [Simple Verification Features](#simple-verification-features)
+* [Procedural Statements and Procedural Blocks](#procedural-statements-and-procedural-blocks)
+
 
 ## Timing Control
 ----
@@ -828,7 +837,7 @@ Verilog has to ways to connect ports:
 
 SystemVerilog adds to options to simplify port connections: **.name** and ** .* **.
 
-## Implicit Port Connection - .name
+### Implicit Port Connection - .name
 * Where signal and port names match, just use **.clk = .clk(clk)**
 * It can be mixed with a named connection - for ports where names do not match
 * Signals used in **.name** must be explicity declared
@@ -852,7 +861,7 @@ count c2 (.clk(clk) , .rst(rst) , .ld(ld) , .data(data) , .cnt(cnt) , .val(val))
 count c3 (.data , .clk , .rst(reset) , .ld(load), .cnt , .val(val));
 ```
 
-## Implicit Port Connection - .*
+### Implicit Port Connection - .*
 * Where all signal and port names match, just use ** .* **
 * It automatically connects ports to signals of the same name
 * There is safety of named connection without the verbositiy - can lose some port list readability
@@ -1595,7 +1604,7 @@ module testbench;
 endmodule
 ```
 
-## Interface Methods
+### Interface Methods
 A subroutine defined within and interface is called an **interface method**.
 * Writing/reaing interface signals can be handled by tasts - abstract interface communication 
 * However everymodule must contaion copies of the interface - maintainability issues
