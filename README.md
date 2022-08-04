@@ -12,7 +12,17 @@ SystemVerilog Fundamentals
 * [Tasks and Functions](#tasks-and-functions)
 * [Interfaces](#interfaces)
 * [Simple Verification Features](#simple-verification-features)
-* [Procedural Statements and Procedural Blocks](#procedural-statements-and-procedural-blocks)
+* [Clocking Blocks](#clocking-blocks)
+* [Random Stimulus](#random-stimulus)
+* [Basic Classes](#basic-classes)
+* [Polymorphism and Virtuality](#polymorphism-and-virtuality)
+* [Class-Based Random Stimulus](#class-based-random-stimulus)
+* [Interfaces in Verification](#interfaces-in-verification)
+* [Covergroup Coverage](#covergroup-coverage)
+* [Queues and Dynamic and Associative Array](#queues-and-dynamic-and-associative-array)
+* [Assertion Based Verification](#assertion-based-verification)
+* [Introduction to SystemVerilog Assertions](#introduction-to-systemverilog-assertions)
+* [Interproccess Synchronization](#interproccess-synchronization)
 
 
 ## Timing Control
@@ -1793,7 +1803,8 @@ always @(negedge clk) begin
 ```
 
 ### Immediate and Concurrent Assertions
-An immediate assertion is an instantaneous boolean check - single cycle. 
+An immediate assertion is an instantaneous boolean check - single 
+. 
 
 ```sv
 always begin : CHECK @ (posedge ce);
@@ -2021,7 +2032,7 @@ endclocking
 default clocking cb3
 ```
 
-### Cycle Dely
+### Cycle Delay
 * You can insert cycle delays for the default clocking block
   * ##N - positive number or identifier 
   * ##(expr) - positive integer expression
