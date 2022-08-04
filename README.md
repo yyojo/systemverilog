@@ -2662,7 +2662,7 @@ initial begin
   t2.iam(); // sub-class (tagframe) method now visiable
 ```
 
-### Using $cast
+### Using  $cast
 Casting lets sub-class instances use resources defined for parent classes.
 **$cast** is actually a subroutine - defined as both function and task 
 * Syntax - **$cast(destination , source)** , if the source does not contain a matching instance for the destination - task gives a runtime error , function returns 0
