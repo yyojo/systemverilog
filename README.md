@@ -1885,7 +1885,7 @@ f;
 
 ## Clocking Blocks
 ----
-the **clocking block** construct identifies clock signals and captures the timing and synchornization requirements of the blocks being modeled.
+The **clocking block** construct identifies clock signals and captures the timing and synchornization requirements of the blocks being modeled.
 <img width="1520" alt="Screen Shot 2022-07-26 at 13 56 27" src="https://user-images.githubusercontent.com/109002901/180990205-472c5f2a-3152-4cfe-9c8f-cb2c2e7a2b0c.png">
 
 * Driving or sampling DUT port on active clock edges can lead to race conditions
