@@ -1527,7 +1527,7 @@ endinterface
 module test;
   fastbus #(8,5) bus8x5 (clk); // 8-bit data and 5-bit address
   fastbus #(8) bus8x8 (clk); // you can override parameters duting interface instantiation
-  slowbus #(.WIDTH(8) bus8 (clk) // 8 bit data
+  slowbus #(.WIDTH(8)) bus8 (clk) // 8 bit data
 endmodule
 ```
 
