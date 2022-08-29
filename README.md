@@ -2113,8 +2113,7 @@ Create a matrix using nested loops to index through combinations.
 * Structued stimulus does not thoroughlty test CPU functonality
 * It misses the most transitions between value combinations - what if AAD1 followed by JMP causes an out-of-range error
 
-### Solution 2 - Employ SV Randomaization and Constraints
-The human brain loves the patterns, however, bugs don't come in patterns. SystemVerilog provides a new set of structures for generating and constraining random variable.
+### Solution 2 - Employ SV Randomaization and ConstraintsThe human brain loves the patterns, however, bugs don't come in patterns. SystemVerilog provides a new set of structures for generating and constraining random variable.
 * Random generation allows minimal code to generate mana data sets
 * Constraints restricts the data set to meaningful data
 * You can apply randomization with constraints to:
@@ -3659,6 +3658,13 @@ initial begin
   
   // delete array
   dynarr.delete();
+  
+  int mat [][];
+  
+  mat = new[32]; // initialize rows
+  foreach (mat[i]) begin
+            mat[i] = new [32]; // initialize columns 
+        end 
 end
 ```
 
