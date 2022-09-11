@@ -3455,7 +3455,7 @@ coverage cg @(poseedge clk);
  axbxc : cross a , bcp , ccp; // 32 bins = a(4)* bcp(4)$cpp(2)
 ```
 
-### Defininf a Cover Cross Bin (Explicit Cross bin and Select Expressions)
+### Defining a Cover Cross Bin (Explicit Cross bin and Select Expressions)
 You can explicit cross coverage bins:
 * **binsof** - selects specific bins from a coverpoint
 * **intersect** - filters bin selection to specified value 
