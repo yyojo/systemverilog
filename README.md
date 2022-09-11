@@ -249,7 +249,7 @@ end
 ### Jump Statements
 SystemVerilog adds the break and continue keyword to control execution of any kind of loop statement.
 * **break**
-  * Terminates the execution of loop immmediately
+  * Terminates the execution of loop immediately
   * Usually under conditional control
 
 * **continue**
